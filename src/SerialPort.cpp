@@ -24,15 +24,14 @@
 **  2017-02-14 itas109   http://blog.csdn.net/itas109
 **  2017-03-12 itas109   http://blog.csdn.net/itas109
 **  2017-12-16 itas109   http://blog.csdn.net/itas109
-**  2017-02-14 itas109   http://blog.csdn.net/itas109
+**  2018-02-14 itas109   http://blog.csdn.net/itas109
+**  2018-02-14 jluliuchao
 */
 
 #include "SerialPort.h"
 #include "assert.h"
 
-using namespace itas109;
-
-//»ñÈ¡×¢²á±íÖ¸¶¨Êı¾İµ½list
+//è·å–æ³¨å†Œè¡¨æŒ‡å®šæ•°æ®åˆ°list
 bool getRegKeyValues(std::string regKeyPath, std::list<std::string> & portsList)
 {
 #define MAX_KEY_LENGTH 255
@@ -152,7 +151,7 @@ CSerialPort::CSerialPort()
 	m_hComm = NULL;
 
 	// initialize overlapped structure members to zero
-	///³õÊ¼»¯Òì²½½á¹¹Ìå
+	///åˆå§‹åŒ–å¼‚æ­¥ç»“æ„ä½“
 	m_ov.Offset = 0;
 	m_ov.OffsetHigh = 0;
 
@@ -173,20 +172,20 @@ CSerialPort::CSerialPort()
 	m_hShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
 	// initialize the event objects
-	///ÊÂ¼şÊı×é³õÊ¼»¯£¬Éè¶¨ÓÅÏÈ¼¶±ğ
+	///äº‹ä»¶æ•°ç»„åˆå§‹åŒ–ï¼Œè®¾å®šä¼˜å…ˆçº§åˆ«
 	m_hEventArray[0] = m_hShutdownEvent;	// highest priority
-	//Îª±ÜÃâÓĞĞ©´®¿ÚÉè±¸ÎŞÊı¾İÊäÈë£¬µ«Ò»Ö±·µ»Ø¶ÁÊÂ¼ş£¬Ê¹¼àÌıÏß³Ì×èÈû£¬
-	//¿ÉÒÔ½«¶ÁĞ´·ÅÔÚÁ½¸öÏß³ÌÖĞ£¬»òÕßĞŞ¸Ä¶ÁĞ´ÊÂ¼şÓÅÏÈ¼¶
-	//ĞŞ¸ÄÓÅÏÈ¼¶ÓĞÁ½¸ö·½°¸£º
-	//·½°¸Ò»Îª¼àÌıÏß³ÌÖĞWaitCommEvent()ºó£¬Ìí¼ÓÈçÏÂÁ½ÌõÓï¾ä£º
+	//ä¸ºé¿å…æœ‰äº›ä¸²å£è®¾å¤‡æ— æ•°æ®è¾“å…¥ï¼Œä½†ä¸€ç›´è¿”å›è¯»äº‹ä»¶ï¼Œä½¿ç›‘å¬çº¿ç¨‹é˜»å¡ï¼Œ
+	//å¯ä»¥å°†è¯»å†™æ”¾åœ¨ä¸¤ä¸ªçº¿ç¨‹ä¸­ï¼Œæˆ–è€…ä¿®æ”¹è¯»å†™äº‹ä»¶ä¼˜å…ˆçº§
+	//ä¿®æ”¹ä¼˜å…ˆçº§æœ‰ä¸¤ä¸ªæ–¹æ¡ˆï¼š
+	//æ–¹æ¡ˆä¸€ä¸ºç›‘å¬çº¿ç¨‹ä¸­WaitCommEvent()åï¼Œæ·»åŠ å¦‚ä¸‹ä¸¤æ¡è¯­å¥ï¼š
 	//if (WAIT_OBJECT_O == WaitForSingleObject(port->m_hWriteEvent, 0))
 	//	ResetEvent(port->m_ov.hEvent);
-	//·½°¸¶şÎª³õÊ¼»¯Ê±¼´ĞŞ¸Ä£¬¼´ÏÂÃæÁ½ÌõÓï¾ä£º
+	//æ–¹æ¡ˆäºŒä¸ºåˆå§‹åŒ–æ—¶å³ä¿®æ”¹ï¼Œå³ä¸‹é¢ä¸¤æ¡è¯­å¥ï¼š
 	m_hEventArray[1] = m_hWriteEvent;
 	m_hEventArray[2] = m_ov.hEvent;
 
 	// initialize critical section
-	///³õÊ¼»¯ÁÙ½ç×ÊÔ´
+	///åˆå§‹åŒ–ä¸´ç•Œèµ„æº
 	InitializeCriticalSection(&m_csCommunicationSync);
 }
 
@@ -212,25 +211,20 @@ CSerialPort::~CSerialPort()
 	}
 
 	// delete critical section
-	//ÊÍ·ÅÁÙ½ç×ÊÔ´
+	//é‡Šæ”¾ä¸´ç•Œèµ„æº
 	DeleteCriticalSection(&m_csCommunicationSync);
 }
 
-//
-// Initialize the port. This can be port 1 to MaxSerialPortNum.
-///³õÊ¼»¯´®¿Ú¡£Ö»ÄÜÊÇ1-MaxSerialPortNum
-//
-//parity:
-//  n=none
-//  e=even
-//  o=odd
-//  m=mark
-//  s=space
-//data:
-//  5,6,7,8
-//stop:
-//  1,1.5,2 
-//
+/*
+** pPortOwner:this->GetSafeHwnd()
+** portnr:This can be port 1 to MaxSerialPortNum.
+** baud:baudrate such as 9600,38400,115200
+** parity:'N'-->None 'E'-->Even 'O'-->Odd 'M'-->Mark 'S'-->Space
+** databits:such as 8
+** stopbits:0-->1Bit 1-->1.5Bits 2-->2Bits
+** dwCommEvents:EV_RXCHAR, EV_CTS etc
+** writebuffersize:size to the writebuffer
+*/
 BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (receives message)
 	UINT  portnr,		// portnumber (1..MaxSerialPortNum)
 	UINT  baud,			// baudrate
@@ -272,16 +266,16 @@ BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (rec
 	TCHAR *szBaud = new TCHAR[MAX_PATH];
 
 	/*
-	¶à¸öÏß³Ì²Ù×÷ÏàÍ¬µÄÊı¾İÊ±£¬Ò»°ãÊÇĞèÒª°´Ë³Ğò·ÃÎÊµÄ£¬·ñÔò»áÒıµ¼Êı¾İ´íÂÒ£¬
-	ÎŞ·¨¿ØÖÆÊı¾İ£¬±ä³ÉËæ»ú±äÁ¿¡£Îª½â¾öÕâ¸öÎÊÌâ£¬¾ÍĞèÒªÒıÈë»¥³â±äÁ¿£¬ÈÃÃ¿
-	¸öÏß³Ì¶¼°´Ë³ĞòµØ·ÃÎÊ±äÁ¿¡£ÕâÑù¾ÍĞèÒªÊ¹ÓÃEnterCriticalSectionºÍ
-	LeaveCriticalSectionº¯Êı¡£
+	å¤šä¸ªçº¿ç¨‹æ“ä½œç›¸åŒçš„æ•°æ®æ—¶ï¼Œä¸€èˆ¬æ˜¯éœ€è¦æŒ‰é¡ºåºè®¿é—®çš„ï¼Œå¦åˆ™ä¼šå¼•å¯¼æ•°æ®é”™ä¹±ï¼Œ
+	æ— æ³•æ§åˆ¶æ•°æ®ï¼Œå˜æˆéšæœºå˜é‡ã€‚ä¸ºè§£å†³è¿™ä¸ªé—®é¢˜ï¼Œå°±éœ€è¦å¼•å…¥äº’æ–¥å˜é‡ï¼Œè®©æ¯
+	ä¸ªçº¿ç¨‹éƒ½æŒ‰é¡ºåºåœ°è®¿é—®å˜é‡ã€‚è¿™æ ·å°±éœ€è¦ä½¿ç”¨EnterCriticalSectionå’Œ
+	LeaveCriticalSectionå‡½æ•°ã€‚
 	*/
 	// now it critical!
 	EnterCriticalSection(&m_csCommunicationSync);
 
 	// if the port is already opened: close it
-	///´®¿ÚÒÑ´ò¿ª¾Í¹Øµô
+	///ä¸²å£å·²æ‰“å¼€å°±å…³æ‰
 	if (m_hComm != NULL)
 	{
 		CloseHandle(m_hComm);
@@ -289,7 +283,7 @@ BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (rec
 	}
 
 	// prepare port strings
-	_stprintf_s(szPort, MAX_PATH, _T("\\\\.\\COM%d"), portnr);///¿ÉÒÔÏÔÊ¾COM10ÒÔÉÏ¶Ë¿Ú//add by itas109 2014-01-09
+	_stprintf_s(szPort, MAX_PATH, _T("\\\\.\\COM%d"), portnr);///å¯ä»¥æ˜¾ç¤ºCOM10ä»¥ä¸Šç«¯å£//add by itas109 2014-01-09
 
 	// stop is index 0 = 1 1=1.5 2=2
 	int mystop;
@@ -305,8 +299,8 @@ BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (rec
 	case 2:
 		mystop = TWOSTOPBITS;
 		break;
-		//Ôö¼ÓÄ¬ÈÏÇé¿ö£¬ÒòÎªstopbits=1.5Ê±£¬SetCommState»á±¨´í¡£
-		//Ò»°ãµÄµçÄÔ´®¿Ú²»Ö§³Ö1.5Í£Ö¹Î»£¬Õâ¸ö1.5Í£Ö¹Î»ËÆºõÓÃÔÚºìÍâ´«ÊäÉÏµÄ¡£
+		//å¢åŠ é»˜è®¤æƒ…å†µï¼Œå› ä¸ºstopbits=1.5æ—¶ï¼ŒSetCommStateä¼šæŠ¥é”™ã€‚
+		//ä¸€èˆ¬çš„ç”µè„‘ä¸²å£ä¸æ”¯æŒ1.5åœæ­¢ä½ï¼Œè¿™ä¸ª1.5åœæ­¢ä½ä¼¼ä¹ç”¨åœ¨çº¢å¤–ä¼ è¾“ä¸Šçš„ã€‚
 		//by itas109 20160506
 	default:
 		mystop = ONESTOPBIT;
@@ -331,7 +325,7 @@ BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (rec
 	case _T('S'):
 		myparity = 4;
 		break;
-		//Ôö¼ÓÄ¬ÈÏÇé¿ö¡£
+		//å¢åŠ é»˜è®¤æƒ…å†µã€‚
 		//by itas109 20160506
 	default:
 		myparity = 0;
@@ -341,15 +335,15 @@ BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (rec
 
 	// get a handle to the port
 	/*
-	Í¨ĞÅ³ÌĞòÔÚCreateFile´¦Ö¸¶¨´®¿ÚÉè±¸¼°Ïà¹ØµÄ²Ù×÷ÊôĞÔ£¬ÔÙ·µ»ØÒ»¸ö¾ä±ú£¬
-	¸Ã¾ä±ú½«±»ÓÃÓÚºóĞøµÄÍ¨ĞÅ²Ù×÷£¬²¢¹á´©Õû¸öÍ¨ĞÅ¹ı³Ì´®¿Ú´ò¿ªºó£¬ÆäÊôĞÔ
-	±»ÉèÖÃÎªÄ¬ÈÏÖµ£¬¸ù¾İ¾ßÌåĞèÒª£¬Í¨¹ıµ÷ÓÃGetCommState(hComm,&&dcb)¶ÁÈ¡
-	µ±Ç°´®¿ÚÉè±¸¿ØÖÆ¿éDCBÉèÖÃ£¬ĞŞ¸ÄºóÍ¨¹ıSetCommState(hComm,&&dcb)½«ÆäĞ´
-	Èë¡£ÔËÓÃReadFile()ÓëWriteFile()ÕâÁ½¸öAPIº¯ÊıÊµÏÖ´®¿Ú¶ÁĞ´²Ù×÷£¬ÈôÎªÒì
-	²½Í¨ĞÅ·½Ê½£¬Á½º¯ÊıÖĞ×îºóÒ»¸ö²ÎÊıÎªÖ¸ÏòOVERLAPPED½á¹¹µÄ·Ç¿ÕÖ¸Õë£¬ÔÚ¶Á
-	Ğ´º¯Êı·µ»ØÖµÎªFALSEµÄÇé¿öÏÂ£¬µ÷ÓÃGetLastError()º¯Êı£¬·µ»ØÖµÎªERROR_IO_PENDING£¬
-	±íÃ÷I/O²Ù×÷Ğü¹Ò£¬¼´²Ù×÷×ªÈëºóÌ¨¼ÌĞøÖ´ĞĞ¡£´ËÊ±£¬¿ÉÒÔÓÃWaitForSingleObject()
-	À´µÈ´ı½áÊøĞÅºÅ²¢ÉèÖÃ×î³¤µÈ´ıÊ±¼ä
+	é€šä¿¡ç¨‹åºåœ¨CreateFileå¤„æŒ‡å®šä¸²å£è®¾å¤‡åŠç›¸å…³çš„æ“ä½œå±æ€§ï¼Œå†è¿”å›ä¸€ä¸ªå¥æŸ„ï¼Œ
+	è¯¥å¥æŸ„å°†è¢«ç”¨äºåç»­çš„é€šä¿¡æ“ä½œï¼Œå¹¶è´¯ç©¿æ•´ä¸ªé€šä¿¡è¿‡ç¨‹ä¸²å£æ‰“å¼€åï¼Œå…¶å±æ€§
+	è¢«è®¾ç½®ä¸ºé»˜è®¤å€¼ï¼Œæ ¹æ®å…·ä½“éœ€è¦ï¼Œé€šè¿‡è°ƒç”¨GetCommState(hComm,&&dcb)è¯»å–
+	å½“å‰ä¸²å£è®¾å¤‡æ§åˆ¶å—DCBè®¾ç½®ï¼Œä¿®æ”¹åé€šè¿‡SetCommState(hComm,&&dcb)å°†å…¶å†™
+	å…¥ã€‚è¿ç”¨ReadFile()ä¸WriteFile()è¿™ä¸¤ä¸ªAPIå‡½æ•°å®ç°ä¸²å£è¯»å†™æ“ä½œï¼Œè‹¥ä¸ºå¼‚
+	æ­¥é€šä¿¡æ–¹å¼ï¼Œä¸¤å‡½æ•°ä¸­æœ€åä¸€ä¸ªå‚æ•°ä¸ºæŒ‡å‘OVERLAPPEDç»“æ„çš„éç©ºæŒ‡é’ˆï¼Œåœ¨è¯»
+	å†™å‡½æ•°è¿”å›å€¼ä¸ºFALSEçš„æƒ…å†µä¸‹ï¼Œè°ƒç”¨GetLastError()å‡½æ•°ï¼Œè¿”å›å€¼ä¸ºERROR_IO_PENDINGï¼Œ
+	è¡¨æ˜I/Oæ“ä½œæ‚¬æŒ‚ï¼Œå³æ“ä½œè½¬å…¥åå°ç»§ç»­æ‰§è¡Œã€‚æ­¤æ—¶ï¼Œå¯ä»¥ç”¨WaitForSingleObject()
+	æ¥ç­‰å¾…ç»“æŸä¿¡å·å¹¶è®¾ç½®æœ€é•¿ç­‰å¾…æ—¶é—´
 	*/
 	m_hComm = CreateFile(szPort,						// communication port string (COMX)
 		GENERIC_READ | GENERIC_WRITE,	// read/write types
@@ -359,14 +353,14 @@ BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (rec
 		FILE_FLAG_OVERLAPPED,			// Async I/O
 		0);							// template must be 0 for comm devices
 
-	///´´½¨Ê§°Ü
+	///åˆ›å»ºå¤±è´¥
 	if (m_hComm == INVALID_HANDLE_VALUE)
 	{
 		//add by itas109 2016-08-02
-		//´®¿Ú´ò¿ªÊ§°Ü£¬Ôö¼ÓÌáÊ¾ĞÅÏ¢
+		//ä¸²å£æ‰“å¼€å¤±è´¥ï¼Œå¢åŠ æç¤ºä¿¡æ¯
 		switch (GetLastError())
 		{
-			//´®¿Ú²»´æÔÚ
+			//ä¸²å£ä¸å­˜åœ¨
 		case ERROR_FILE_NOT_FOUND:
 		{
 									 TCHAR Temp[200] = { 0 };
@@ -374,7 +368,7 @@ BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (rec
 									 MessageBox(NULL, Temp, _T("COM InitPort Error"), MB_ICONERROR);
 									 break;
 		}
-			//´®¿Ú¾Ü¾ø·ÃÎÊ
+			//ä¸²å£æ‹’ç»è®¿é—®
 		case ERROR_ACCESS_DENIED:
 		{
 									TCHAR Temp[200] = { 0 };
@@ -393,7 +387,7 @@ BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (rec
 	}
 
 	// set the timeout values
-	///ÉèÖÃ³¬Ê±
+	///è®¾ç½®è¶…æ—¶
 	m_SerialPortTimeouts.ReadIntervalTimeout = ReadIntervalTimeout * 1000;
 	m_SerialPortTimeouts.ReadTotalTimeoutMultiplier = ReadTotalTimeoutMultiplier * 1000;
 	m_SerialPortTimeouts.ReadTotalTimeoutConstant = ReadTotalTimeoutConstant * 1000;
@@ -401,25 +395,25 @@ BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (rec
 	m_SerialPortTimeouts.WriteTotalTimeoutConstant = WriteTotalTimeoutConstant * 1000;
 
 	// configure
-	///ÅäÖÃ
-	///·Ö±ğµ÷ÓÃWindows APIÉèÖÃ´®¿Ú²ÎÊı
-	if (SetCommTimeouts(m_hComm, &m_SerialPortTimeouts))///ÉèÖÃ³¬Ê±
+	///é…ç½®
+	///åˆ†åˆ«è°ƒç”¨Windows APIè®¾ç½®ä¸²å£å‚æ•°
+	if (SetCommTimeouts(m_hComm, &m_SerialPortTimeouts))///è®¾ç½®è¶…æ—¶
 	{
 		/*
-		Èô¶Ô¶Ë¿ÚÊı¾İµÄÏìÓ¦Ê±¼äÒªÇó½ÏÑÏ¸ñ£¬¿É²ÉÓÃÊÂ¼şÇı¶¯·½Ê½¡£
-		ÊÂ¼şÇı¶¯·½Ê½Í¨¹ıÉèÖÃÊÂ¼şÍ¨Öª£¬µ±ËùÏ£ÍûµÄÊÂ¼ş·¢ÉúÊ±£¬Windows
-		·¢³ö¸ÃÊÂ¼şÒÑ·¢ÉúµÄÍ¨Öª£¬ÕâÓëDOS»·¾³ÏÂµÄÖĞ¶Ï·½Ê½ºÜÏàËÆ¡£Windows
-		¶¨ÒåÁË9ÖÖ´®¿ÚÍ¨ĞÅÊÂ¼ş£¬½Ï³£ÓÃµÄÓĞÒÔÏÂÈıÖÖ£º
-		EV_RXCHAR:½ÓÊÕµ½Ò»¸ö×Ö½Ú£¬²¢·ÅÈëÊäÈë»º³åÇø£»
-		EV_TXEMPTY:Êä³ö»º³åÇøÖĞµÄ×îºóÒ»¸ö×Ö·û£¬·¢ËÍ³öÈ¥£»
-		EV_RXFLAG:½ÓÊÕµ½ÊÂ¼ş×Ö·û(DCB½á¹¹ÖĞEvtChar³ÉÔ±)£¬·ÅÈëÊäÈë»º³åÇø
-		ÔÚÓÃSetCommMask()Ö¸¶¨ÁËÓĞÓÃµÄÊÂ¼şºó£¬Ó¦ÓÃ³ÌĞò¿Éµ÷ÓÃWaitCommEvent()À´µÈ´ıÊÂ
-		¼şµÄ·¢Éú¡£SetCommMask(hComm,0)¿ÉÊ¹WaitCommEvent()ÖĞÖ¹
+		è‹¥å¯¹ç«¯å£æ•°æ®çš„å“åº”æ—¶é—´è¦æ±‚è¾ƒä¸¥æ ¼ï¼Œå¯é‡‡ç”¨äº‹ä»¶é©±åŠ¨æ–¹å¼ã€‚
+		äº‹ä»¶é©±åŠ¨æ–¹å¼é€šè¿‡è®¾ç½®äº‹ä»¶é€šçŸ¥ï¼Œå½“æ‰€å¸Œæœ›çš„äº‹ä»¶å‘ç”Ÿæ—¶ï¼ŒWindows
+		å‘å‡ºè¯¥äº‹ä»¶å·²å‘ç”Ÿçš„é€šçŸ¥ï¼Œè¿™ä¸DOSç¯å¢ƒä¸‹çš„ä¸­æ–­æ–¹å¼å¾ˆç›¸ä¼¼ã€‚Windows
+		å®šä¹‰äº†9ç§ä¸²å£é€šä¿¡äº‹ä»¶ï¼Œè¾ƒå¸¸ç”¨çš„æœ‰ä»¥ä¸‹ä¸‰ç§ï¼š
+		EV_RXCHAR:æ¥æ”¶åˆ°ä¸€ä¸ªå­—èŠ‚ï¼Œå¹¶æ”¾å…¥è¾“å…¥ç¼“å†²åŒºï¼›
+		EV_TXEMPTY:è¾“å‡ºç¼“å†²åŒºä¸­çš„æœ€åä¸€ä¸ªå­—ç¬¦ï¼Œå‘é€å‡ºå»ï¼›
+		EV_RXFLAG:æ¥æ”¶åˆ°äº‹ä»¶å­—ç¬¦(DCBç»“æ„ä¸­EvtCharæˆå‘˜)ï¼Œæ”¾å…¥è¾“å…¥ç¼“å†²åŒº
+		åœ¨ç”¨SetCommMask()æŒ‡å®šäº†æœ‰ç”¨çš„äº‹ä»¶åï¼Œåº”ç”¨ç¨‹åºå¯è°ƒç”¨WaitCommEvent()æ¥ç­‰å¾…äº‹
+		ä»¶çš„å‘ç”Ÿã€‚SetCommMask(hComm,0)å¯ä½¿WaitCommEvent()ä¸­æ­¢
 		*/
-		if (SetCommMask(m_hComm, dwCommEvents))///ÉèÖÃÍ¨ĞÅÊÂ¼ş
+		if (SetCommMask(m_hComm, dwCommEvents))///è®¾ç½®é€šä¿¡äº‹ä»¶
 		{
 
-			if (GetCommState(m_hComm, &m_dcb))///»ñÈ¡µ±Ç°DCB²ÎÊı
+			if (GetCommState(m_hComm, &m_dcb))///è·å–å½“å‰DCBå‚æ•°
 			{
 				m_dcb.EvtChar = 'q';
 				m_dcb.fRtsControl = RTS_CONTROL_ENABLE;		// set RTS bit high!
@@ -428,9 +422,9 @@ BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (rec
 				m_dcb.ByteSize = databits;
 				m_dcb.StopBits = mystop;
 
-				//if (BuildCommDCB(szBaud &m_dcb))///ÌîĞ´DCB½á¹¹
+				//if (BuildCommDCB(szBaud &m_dcb))///å¡«å†™DCBç»“æ„
 				//{
-				if (SetCommState(m_hComm, &m_dcb))///ÅäÖÃDCB
+				if (SetCommState(m_hComm, &m_dcb))///é…ç½®DCB
 					; // normal operation... continue
 				else
 					ProcessErrorMessage(_T("SetCommState()"));
@@ -451,11 +445,11 @@ BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (rec
 	delete[] szBaud;
 
 	// flush the port
-	///ÖÕÖ¹¶ÁĞ´²¢Çå¿Õ½ÓÊÕºÍ·¢ËÍ
+	///ç»ˆæ­¢è¯»å†™å¹¶æ¸…ç©ºæ¥æ”¶å’Œå‘é€
 	PurgeComm(m_hComm, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
 
 	// release critical section
-	///ÊÍ·ÅÁÙ½ç×ÊÔ´
+	///é‡Šæ”¾ä¸´ç•Œèµ„æº
 	LeaveCriticalSection(&m_csCommunicationSync);
 
 	//TRACE("Initialisation for communicationport %d completed.\nUse Startmonitor to communicate.\n", portnr);
@@ -465,9 +459,9 @@ BOOL CSerialPort::InitPort(HWND pPortOwner,	// the owner (CWnd) of the port (rec
 
 //
 //  The CommThread Function.
-///Ïß³Ìº¯Êı
-///¼àÊÓÏß³ÌµÄ´óÖÂÁ÷³Ì£º
-///¼ì²é´®¿Ú-->½øÈëÑ­»·{WaitCommEvent(²»×èÈûÑ¯ÎÊ)Ñ¯ÎÊÊÂ¼ş-->Èç¹ûÓĞÊÂ¼şÀ´µ½-->µ½ÏàÓ¦´¦Àí(¹Ø±Õ\¶Á\Ğ´)}
+///çº¿ç¨‹å‡½æ•°
+///ç›‘è§†çº¿ç¨‹çš„å¤§è‡´æµç¨‹ï¼š
+///æ£€æŸ¥ä¸²å£-->è¿›å…¥å¾ªç¯{WaitCommEvent(ä¸é˜»å¡è¯¢é—®)è¯¢é—®äº‹ä»¶-->å¦‚æœæœ‰äº‹ä»¶æ¥åˆ°-->åˆ°ç›¸åº”å¤„ç†(å…³é—­\è¯»\å†™)}
 //
 DWORD WINAPI CSerialPort::CommThread(LPVOID pParam)
 {
@@ -477,7 +471,7 @@ DWORD WINAPI CSerialPort::CommThread(LPVOID pParam)
 
 	// Set the status variable in the dialog class to
 	// TRUE to indicate the thread is running.
-	///TRUE±íÊ¾Ïß³ÌÕıÔÚÔËĞĞ
+	///TRUEè¡¨ç¤ºçº¿ç¨‹æ­£åœ¨è¿è¡Œ
 	port->m_bThreadAlive = TRUE;
 
 	// Misc. variables
@@ -490,7 +484,7 @@ DWORD WINAPI CSerialPort::CommThread(LPVOID pParam)
 	BOOL  bResult = TRUE;
 
 	// Clear comm buffers at startup
-	///¿ªÊ¼Ê±Çå³ı´®¿Ú»º³å
+	///å¼€å§‹æ—¶æ¸…é™¤ä¸²å£ç¼“å†²
 	if (port->m_hComm)		// check if the port is opened
 	{
 		PurgeComm(port->m_hComm, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
@@ -498,7 +492,7 @@ DWORD WINAPI CSerialPort::CommThread(LPVOID pParam)
 	}
 
 	// begin forever loop.  This loop will run as long as the thread is alive.
-	///Ö»ÒªÏß³Ì´æÔÚ¾Í²»¶Ï¶ÁÈ¡Êı¾İ
+	///åªè¦çº¿ç¨‹å­˜åœ¨å°±ä¸æ–­è¯»å–æ•°æ®
 	for (;;)
 	{
 
@@ -514,61 +508,61 @@ DWORD WINAPI CSerialPort::CommThread(LPVOID pParam)
 		// we do this for each port!
 
 		/*
-		WaitCommEventº¯ÊıµÚ3¸ö²ÎÊı1pOverlapped¿ÉÒÔÊÇÒ»¸öOVERLAPPED½á¹¹µÄ±äÁ¿Ö¸Õë
-		£¬Ò²¿ÉÒÔÊÇNULL£¬µ±ÓÃNULLÊ±£¬±íÊ¾¸Ãº¯ÊıÊÇÍ¬²½µÄ£¬·ñÔò±íÊ¾¸Ãº¯ÊıÊÇÒì²½µÄ¡£
-		µ÷ÓÃWaitCommEventÊ±£¬Èç¹ûÒì²½²Ù×÷²»ÄÜÁ¢¼´Íê³É£¬»áÁ¢¼´·µ»ØFALSE£¬ÏµÍ³ÔÚ
-		WaitCommEvent·µ»ØÇ°½«OVERLAPPED½á¹¹³ÉÔ±hEventÉèÎªÎŞĞÅºÅ×´Ì¬£¬µÈµ½²úÉúÍ¨ĞÅ
-		ÊÂ¼şÊ±£¬ÏµÍ³½«ÆäÖÃÓĞĞÅºÅ
+		WaitCommEventå‡½æ•°ç¬¬3ä¸ªå‚æ•°1pOverlappedå¯ä»¥æ˜¯ä¸€ä¸ªOVERLAPPEDç»“æ„çš„å˜é‡æŒ‡é’ˆ
+		ï¼Œä¹Ÿå¯ä»¥æ˜¯NULLï¼Œå½“ç”¨NULLæ—¶ï¼Œè¡¨ç¤ºè¯¥å‡½æ•°æ˜¯åŒæ­¥çš„ï¼Œå¦åˆ™è¡¨ç¤ºè¯¥å‡½æ•°æ˜¯å¼‚æ­¥çš„ã€‚
+		è°ƒç”¨WaitCommEventæ—¶ï¼Œå¦‚æœå¼‚æ­¥æ“ä½œä¸èƒ½ç«‹å³å®Œæˆï¼Œä¼šç«‹å³è¿”å›FALSEï¼Œç³»ç»Ÿåœ¨
+		WaitCommEventè¿”å›å‰å°†OVERLAPPEDç»“æ„æˆå‘˜hEventè®¾ä¸ºæ— ä¿¡å·çŠ¶æ€ï¼Œç­‰åˆ°äº§ç”Ÿé€šä¿¡
+		äº‹ä»¶æ—¶ï¼Œç³»ç»Ÿå°†å…¶ç½®æœ‰ä¿¡å·
 		*/
 
-		bResult = WaitCommEvent(port->m_hComm, &Event, &port->m_ov);///±íÊ¾¸Ãº¯ÊıÊÇÒì²½µÄ
+		bResult = WaitCommEvent(port->m_hComm, &Event, &port->m_ov);///è¡¨ç¤ºè¯¥å‡½æ•°æ˜¯å¼‚æ­¥çš„
 
 		if (!bResult)
 		{
 			// If WaitCommEvent() returns FALSE, process the last error to determin
 			// the reason..
-			///Èç¹ûWaitCommEvent·µ»ØErrorÎªFALSE£¬Ôò²éÑ¯´íÎóĞÅÏ¢
+			///å¦‚æœWaitCommEventè¿”å›Errorä¸ºFALSEï¼Œåˆ™æŸ¥è¯¢é”™è¯¯ä¿¡æ¯
 			switch (dwError = GetLastError())
 			{
-			case ERROR_IO_PENDING: 	///Õı³£Çé¿ö£¬Ã»ÓĞ×Ö·û¿É¶Á erroe code:997
+			case ERROR_IO_PENDING: 	///æ­£å¸¸æƒ…å†µï¼Œæ²¡æœ‰å­—ç¬¦å¯è¯» erroe code:997
 			{
 										// This is a normal return value if there are no bytes
 										// to read at the port.
 										// Do nothing and continue
 										break;
 			}
-			case ERROR_INVALID_PARAMETER:///ÏµÍ³´íÎó erroe code:87
+			case ERROR_INVALID_PARAMETER:///ç³»ç»Ÿé”™è¯¯ erroe code:87
 			{
 											 // Under Windows NT, this value is returned for some reason.
 											 // I have not investigated why, but it is also a valid reply
 											 // Also do nothing and continue.
 											 break;
 			}
-			case ERROR_ACCESS_DENIED:///¾Ü¾ø·ÃÎÊ erroe code:5
+			case ERROR_ACCESS_DENIED:///æ‹’ç»è®¿é—® erroe code:5
 			{
 										 port->m_hComm = INVALID_HANDLE_VALUE;
 										 TCHAR Temp[200] = { 0 };
-										 _stprintf_s(Temp, 200, _T("COM%d ERROR_ACCESS_DENIED£¬WaitCommEvent() Error Code:%d"), port->m_nPortNr, GetLastError());
+										 _stprintf_s(Temp, 200, _T("COM%d ERROR_ACCESS_DENIEDï¼ŒWaitCommEvent() Error Code:%d"), port->m_nPortNr, GetLastError());
 										 MessageBox(NULL, Temp, _T("COM WaitCommEvent Error"), MB_ICONERROR);
 										 break;
 			}
-			case ERROR_INVALID_HANDLE:///´ò¿ª´®¿ÚÊ§°Ü erroe code:6
+			case ERROR_INVALID_HANDLE:///æ‰“å¼€ä¸²å£å¤±è´¥ erroe code:6
 			{
 										  port->m_hComm = INVALID_HANDLE_VALUE;
 										  break;
 			}
-			case ERROR_BAD_COMMAND:///Á¬½Ó¹ı³ÌÖĞ·Ç·¨¶Ï¿ª erroe code:22
+			case ERROR_BAD_COMMAND:///è¿æ¥è¿‡ç¨‹ä¸­éæ³•æ–­å¼€ erroe code:22
 			{
 									   port->m_hComm = INVALID_HANDLE_VALUE;
 									   TCHAR Temp[200] = { 0 };
-									   _stprintf_s(Temp, 200, _T("COM%d ERROR_BAD_COMMAND£¬WaitCommEvent() Error Code:%d"), port->m_nPortNr, GetLastError());
+									   _stprintf_s(Temp, 200, _T("COM%d ERROR_BAD_COMMANDï¼ŒWaitCommEvent() Error Code:%d"), port->m_nPortNr, GetLastError());
 									   MessageBox(NULL, Temp, _T("COM WaitCommEvent Error"), MB_ICONERROR);
 									   break;
 			}
-			default:///·¢ÉúÆäËû´íÎó£¬ÆäÖĞÓĞ´®¿Ú¶ÁĞ´ÖĞ¶Ï¿ª´®¿ÚÁ¬½ÓµÄ´íÎó£¨´íÎó22£©
+			default:///å‘ç”Ÿå…¶ä»–é”™è¯¯ï¼Œå…¶ä¸­æœ‰ä¸²å£è¯»å†™ä¸­æ–­å¼€ä¸²å£è¿æ¥çš„é”™è¯¯ï¼ˆé”™è¯¯22ï¼‰
 			{
 						// All other error codes indicate a serious error has
-						//·¢Éú´íÎóÊ±£¬½«´®¿Ú¾ä±úÖÃÎªÎŞĞ§¾ä±ú
+						//å‘ç”Ÿé”™è¯¯æ—¶ï¼Œå°†ä¸²å£å¥æŸ„ç½®ä¸ºæ— æ•ˆå¥æŸ„
 						port->m_hComm = INVALID_HANDLE_VALUE;
 						// occured.  Process this error.
 						port->ProcessErrorMessage(_T("WaitCommEvent()"));
@@ -576,7 +570,7 @@ DWORD WINAPI CSerialPort::CommThread(LPVOID pParam)
 			}
 			}
 		}
-		else	///WaitCommEvent()ÄÜÕıÈ··µ»Ø
+		else	///WaitCommEvent()èƒ½æ­£ç¡®è¿”å›
 		{
 			// If WaitCommEvent() returns TRUE, check to be sure there are
 			// actually bytes in the buffer to read.  
@@ -614,17 +608,17 @@ DWORD WINAPI CSerialPort::CommThread(LPVOID pParam)
 				continue;
 		}	// end if bResult
 
-		///Ö÷µÈ´ıº¯Êı£¬»á×èÈûÏß³Ì
+		///ä¸»ç­‰å¾…å‡½æ•°ï¼Œä¼šé˜»å¡çº¿ç¨‹
 		// Main wait function.  This function will normally block the thread
 		// until one of nine events occur that require action.
-		///µÈ´ı3¸öÊÂ¼ş£º¹Ø¶Ï/¶Á/Ğ´£¬ÓĞÒ»¸öÊÂ¼ş·¢Éú¾Í·µ»Ø
+		///ç­‰å¾…3ä¸ªäº‹ä»¶ï¼šå…³æ–­/è¯»/å†™ï¼Œæœ‰ä¸€ä¸ªäº‹ä»¶å‘ç”Ÿå°±è¿”å›
 		//if multiple objects signal it will get the index of the first one
 		//it means it lost some signal //by itas109 2017-12-17
-		Event = MsgWaitForMultipleObjects(3, ///3¸öÊÂ¼ş
-			port->m_hEventArray, ///ÊÂ¼şÊı×é
-			FALSE, ///ÓĞÒ»¸öÊÂ¼ş·¢Éú¾Í·µ»Ø
+		Event = MsgWaitForMultipleObjects(3, ///3ä¸ªäº‹ä»¶
+			port->m_hEventArray, ///äº‹ä»¶æ•°ç»„
+			FALSE, ///æœ‰ä¸€ä¸ªäº‹ä»¶å‘ç”Ÿå°±è¿”å›
 			INFINITE,
-			QS_ALLEVENTS);///³¬Ê±Ê±¼ä
+			QS_ALLEVENTS);///è¶…æ—¶æ—¶é—´
 
 		//deal with mutil handle tigger at the same time	//by itas109 2017-12-17
 		if (Event >= WAIT_OBJECT_0 && Event < WAIT_OBJECT_0 + 3)
@@ -641,7 +635,7 @@ DWORD WINAPI CSerialPort::CommThread(LPVOID pParam)
 					{
 											  // Shutdown event.  This is event zero so it will be
 											  // the higest priority and be serviced first.
-											  ///¹Ø¶ÏÊÂ¼ş£¬¹Ø±Õ´®¿Ú
+											  ///å…³æ–­äº‹ä»¶ï¼Œå…³é—­ä¸²å£
 											  CloseHandle(port->m_hComm);
 											  port->m_hComm = NULL;
 											  port->m_bThreadAlive = FALSE;
@@ -652,53 +646,53 @@ DWORD WINAPI CSerialPort::CommThread(LPVOID pParam)
 
 											  break;
 					}
-					case WAIT_OBJECT_0 + 1: // write event ·¢ËÍÊı¾İ
+					case WAIT_OBJECT_0 + 1: // write event å‘é€æ•°æ®
 					{
 												// Write character event from port
 												WriteChar(port);
 												break;
 					}
-					case WAIT_OBJECT_0 + 2:	// read event ½«¶¨ÒåµÄ¸÷ÖÖÏûÏ¢·¢ËÍ³öÈ¥
+					case WAIT_OBJECT_0 + 2:	// read event å°†å®šä¹‰çš„å„ç§æ¶ˆæ¯å‘é€å‡ºå»
 					{
 												GetCommMask(port->m_hComm, &CommEvent);
-												if (CommEvent & EV_RXCHAR) //½ÓÊÕµ½×Ö·û£¬²¢ÖÃÓÚÊäÈë»º³åÇøÖĞ
+												if (CommEvent & EV_RXCHAR) //æ¥æ”¶åˆ°å­—ç¬¦ï¼Œå¹¶ç½®äºè¾“å…¥ç¼“å†²åŒºä¸­
 												{
 													if (IsReceiveString == 1)
 													{
-														ReceiveStr(port);//¶à×Ö·û½ÓÊÕ
+														ReceiveStr(port);//å¤šå­—ç¬¦æ¥æ”¶
 													}
 													else if (IsReceiveString == 0)
 													{
-														ReceiveChar(port);//µ¥×Ö·û½ÓÊÕ
+														ReceiveChar(port);//å•å­—ç¬¦æ¥æ”¶
 													}
 													else
 													{
-														//Ä¬ÈÏ¶à×Ö·û½ÓÊÕ
-														ReceiveStr(port);//¶à×Ö·û½ÓÊÕ
+														//é»˜è®¤å¤šå­—ç¬¦æ¥æ”¶
+														ReceiveStr(port);//å¤šå­—ç¬¦æ¥æ”¶
 													}
 												}
 
-												if (CommEvent & EV_CTS) //CTSĞÅºÅ×´Ì¬·¢Éú±ä»¯
+												if (CommEvent & EV_CTS) //CTSä¿¡å·çŠ¶æ€å‘ç”Ÿå˜åŒ–
 													::SendMessage(port->m_pOwner, WM_COMM_CTS_DETECTED, (WPARAM)0, (LPARAM)port->m_nPortNr);
-												if (CommEvent & EV_RXFLAG) //½ÓÊÕµ½ÊÂ¼ş×Ö·û£¬²¢ÖÃÓÚÊäÈë»º³åÇøÖĞ 
+												if (CommEvent & EV_RXFLAG) //æ¥æ”¶åˆ°äº‹ä»¶å­—ç¬¦ï¼Œå¹¶ç½®äºè¾“å…¥ç¼“å†²åŒºä¸­ 
 													::SendMessage(port->m_pOwner, WM_COMM_RXFLAG_DETECTED, (WPARAM)0, (LPARAM)port->m_nPortNr);
-												if (CommEvent & EV_BREAK)  //ÊäÈëÖĞ·¢ÉúÖĞ¶Ï
+												if (CommEvent & EV_BREAK)  //è¾“å…¥ä¸­å‘ç”Ÿä¸­æ–­
 													::SendMessage(port->m_pOwner, WM_COMM_BREAK_DETECTED, (WPARAM)0, (LPARAM)port->m_nPortNr);
-												if (CommEvent & EV_ERR) //·¢ÉúÏßÂ·×´Ì¬´íÎó£¬ÏßÂ·×´Ì¬´íÎó°üÀ¨CE_FRAME,CE_OVERRUNºÍCE_RXPARITY 
+												if (CommEvent & EV_ERR) //å‘ç”Ÿçº¿è·¯çŠ¶æ€é”™è¯¯ï¼Œçº¿è·¯çŠ¶æ€é”™è¯¯åŒ…æ‹¬CE_FRAME,CE_OVERRUNå’ŒCE_RXPARITY 
 													::SendMessage(port->m_pOwner, WM_COMM_ERR_DETECTED, (WPARAM)0, (LPARAM)port->m_nPortNr);
-												if (CommEvent & EV_RING) //¼ì²âµ½ÕñÁåÖ¸Ê¾
+												if (CommEvent & EV_RING) //æ£€æµ‹åˆ°æŒ¯é“ƒæŒ‡ç¤º
 													::SendMessage(port->m_pOwner, WM_COMM_RING_DETECTED, (WPARAM)0, (LPARAM)port->m_nPortNr);
 
 												break;
 					}
 					case WAIT_FAILED:
 					{
-										// º¯Êıºô½ĞÊ§°Ü
+										// å‡½æ•°å‘¼å«å¤±è´¥
 										break;
 					}
 					case WAIT_TIMEOUT:
 					{
-										 // ³¬Ê±
+										 // è¶…æ—¶
 										 //TRACE("WaitForMultipleObjects Timeout");
 										 break;
 					}
@@ -720,7 +714,7 @@ DWORD WINAPI CSerialPort::CommThread(LPVOID pParam)
 
 //
 // start comm watching
-///¿ªÆô¼àÊÓÏß³Ì
+///å¼€å¯ç›‘è§†çº¿ç¨‹
 //
 BOOL CSerialPort::StartMonitoring()
 {
@@ -733,7 +727,7 @@ BOOL CSerialPort::StartMonitoring()
 
 //
 // Restart the comm thread
-///´Ó¹ÒÆğ»Ö¸´¼àÊÓÏß³Ì
+///ä»æŒ‚èµ·æ¢å¤ç›‘è§†çº¿ç¨‹
 //
 BOOL CSerialPort::ResumeMonitoring()
 {
@@ -745,7 +739,7 @@ BOOL CSerialPort::ResumeMonitoring()
 
 //
 // Suspend the comm thread
-///¹ÒÆğ¼àÊÓÏß³Ì
+///æŒ‚èµ·ç›‘è§†çº¿ç¨‹
 //
 BOOL CSerialPort::SuspendMonitoring()
 {
@@ -768,7 +762,7 @@ BOOL CSerialPort::IsThreadSuspend(HANDLE hThread)
 
 //
 // If there is a error, give the right message
-///Èç¹ûÓĞ´íÎó£¬¸ø³öÌáÊ¾
+///å¦‚æœæœ‰é”™è¯¯ï¼Œç»™å‡ºæç¤º
 //
 void CSerialPort::ProcessErrorMessage(TCHAR* ErrorText)
 {
@@ -813,7 +807,7 @@ void CSerialPort::WriteChar(CSerialPort* port)
 
 	ResetEvent(port->m_hWriteEvent);
 
-	//ÉùÃ÷iÎªµü´úÆ÷   
+	//å£°æ˜iä¸ºè¿­ä»£å™¨   
 	std::list<serialPortBuffer>::iterator i;
 
 	//in general, for mutil send data can deal once.
@@ -862,24 +856,24 @@ void CSerialPort::WriteChar(CSerialPort* port)
 										 bWrite = FALSE;
 										 break;
 				}
-				case ERROR_ACCESS_DENIED:///¾Ü¾ø·ÃÎÊ erroe code:5
+				case ERROR_ACCESS_DENIED:///æ‹’ç»è®¿é—® erroe code:5
 				{
 											 port->m_hComm = INVALID_HANDLE_VALUE;
 											 TCHAR Temp[200] = { 0 };
-											 _stprintf_s(Temp, 200, _T("COM%d ERROR_ACCESS_DENIED£¬WriteFile() Error Code:%d"), port->m_nPortNr, GetLastError());
+											 _stprintf_s(Temp, 200, _T("COM%d ERROR_ACCESS_DENIEDï¼ŒWriteFile() Error Code:%d"), port->m_nPortNr, GetLastError());
 											 MessageBox(NULL, Temp, _T("COM WriteFile Error"), MB_ICONERROR);
 											 break;
 				}
-				case ERROR_INVALID_HANDLE:///´ò¿ª´®¿ÚÊ§°Ü erroe code:6
+				case ERROR_INVALID_HANDLE:///æ‰“å¼€ä¸²å£å¤±è´¥ erroe code:6
 				{
 											  port->m_hComm = INVALID_HANDLE_VALUE;
 											  break;
 				}
-				case ERROR_BAD_COMMAND:///Á¬½Ó¹ı³ÌÖĞ·Ç·¨¶Ï¿ª erroe code:22
+				case ERROR_BAD_COMMAND:///è¿æ¥è¿‡ç¨‹ä¸­éæ³•æ–­å¼€ erroe code:22
 				{
 										   port->m_hComm = INVALID_HANDLE_VALUE;
 										   TCHAR Temp[200] = { 0 };
-										   _stprintf_s(Temp, 200, _T("COM%d ERROR_BAD_COMMAND£¬WriteFile() Error Code:%d"), port->m_nPortNr, GetLastError());
+										   _stprintf_s(Temp, 200, _T("COM%d ERROR_BAD_COMMANDï¼ŒWriteFile() Error Code:%d"), port->m_nPortNr, GetLastError());
 										   MessageBox(NULL, Temp, _T("COM WriteFile Error"), MB_ICONERROR);
 										   break;
 				}
@@ -960,7 +954,7 @@ void CSerialPort::ReceiveChar(CSerialPort* port)
 
 	for (;;)
 	{
-		//add by liquanhai 2011-11-06  ·ÀÖ¹ËÀËø
+		//add by liquanhai 2011-11-06  é˜²æ­¢æ­»é”
 		if (WaitForSingleObject(port->m_hShutdownEvent, 0) == WAIT_OBJECT_0)
 			return;
 
@@ -972,7 +966,7 @@ void CSerialPort::ReceiveChar(CSerialPort* port)
 
 		// ClearCommError() will update the COMSTAT structure and
 		// clear any other errors.
-		///¸üĞÂCOMSTAT
+		///æ›´æ–°COMSTAT
 
 		bResult = ClearCommError(port->m_hComm, &dwError, &comstat);
 
@@ -988,7 +982,7 @@ void CSerialPort::ReceiveChar(CSerialPort* port)
 		// as it is in my production code, but I have found this 
 		// solutiion to be the most efficient way to do this.
 
-		///ËùÓĞ×Ö·û¾ù±»¶Á³ö£¬ÖĞ¶ÏÑ­»·
+		///æ‰€æœ‰å­—ç¬¦å‡è¢«è¯»å‡ºï¼Œä¸­æ–­å¾ªç¯
 		if (comstat.cbInQue == 0)
 		{
 			// break out when all bytes have been read
@@ -999,14 +993,14 @@ void CSerialPort::ReceiveChar(CSerialPort* port)
 
 		if (bRead)
 		{
-			///´®¿Ú¶Á³ö£¬¶Á³ö»º³åÇøÖĞ×Ö½Ú
+			///ä¸²å£è¯»å‡ºï¼Œè¯»å‡ºç¼“å†²åŒºä¸­å­—èŠ‚
 			bResult = ReadFile(port->m_hComm,		// Handle to COMM port 
 				&RXBuff,				// RX Buffer Pointer
 				1,					// Read one byte
 				&BytesRead,			// Stores number of bytes read
 				&port->m_ov);		// pointer to the m_ov structure
 			// deal with the error code 
-			///Èô·µ»Ø´íÎó£¬´íÎó´¦Àí
+			///è‹¥è¿”å›é”™è¯¯ï¼Œé”™è¯¯å¤„ç†
 			if (!bResult)
 			{
 				switch (dwError = GetLastError())
@@ -1015,28 +1009,28 @@ void CSerialPort::ReceiveChar(CSerialPort* port)
 				{
 										 // asynchronous i/o is still in progress 
 										 // Proceed on to GetOverlappedResults();
-										 ///Òì²½IOÈÔÔÚ½øĞĞ
+										 ///å¼‚æ­¥IOä»åœ¨è¿›è¡Œ
 										 bRead = FALSE;
 										 break;
 				}
-				case ERROR_ACCESS_DENIED:///¾Ü¾ø·ÃÎÊ erroe code:5
+				case ERROR_ACCESS_DENIED:///æ‹’ç»è®¿é—® erroe code:5
 				{
 											 port->m_hComm = INVALID_HANDLE_VALUE;
 											 TCHAR Temp[200] = { 0 };
-											 _stprintf_s(Temp, 200, _T("COM%d ERROR_ACCESS_DENIED£¬ReadFile() Error Code:%d"), port->m_nPortNr, GetLastError());
+											 _stprintf_s(Temp, 200, _T("COM%d ERROR_ACCESS_DENIEDï¼ŒReadFile() Error Code:%d"), port->m_nPortNr, GetLastError());
 											 MessageBox(NULL, Temp, _T("COM ReadFile Error"), MB_ICONERROR);
 											 break;
 				}
-				case ERROR_INVALID_HANDLE:///´ò¿ª´®¿ÚÊ§°Ü erroe code:6
+				case ERROR_INVALID_HANDLE:///æ‰“å¼€ä¸²å£å¤±è´¥ erroe code:6
 				{
 											  port->m_hComm = INVALID_HANDLE_VALUE;
 											  break;
 				}
-				case ERROR_BAD_COMMAND:///Á¬½Ó¹ı³ÌÖĞ·Ç·¨¶Ï¿ª erroe code:22
+				case ERROR_BAD_COMMAND:///è¿æ¥è¿‡ç¨‹ä¸­éæ³•æ–­å¼€ erroe code:22
 				{
 										   port->m_hComm = INVALID_HANDLE_VALUE;
 										   TCHAR Temp[200] = { 0 };
-										   _stprintf_s(Temp, 200, _T("COM%d ERROR_BAD_COMMAND£¬ReadFile() Error Code:%d"), port->m_nPortNr, GetLastError());
+										   _stprintf_s(Temp, 200, _T("COM%d ERROR_BAD_COMMANDï¼ŒReadFile() Error Code:%d"), port->m_nPortNr, GetLastError());
 										   MessageBox(NULL, Temp, _T("COM ReadFile Error"), MB_ICONERROR);
 										   break;
 				}
@@ -1045,18 +1039,18 @@ void CSerialPort::ReceiveChar(CSerialPort* port)
 						   // Another error has occured.  Process this error.
 						   port->ProcessErrorMessage(_T("ReadFile()"));
 						   break;
-						   //return;///·ÀÖ¹¶ÁĞ´Êı¾İÊ±£¬´®¿Ú·ÇÕı³£¶Ï¿ªµ¼ÖÂËÀÑ­»·Ò»Ö±Ö´ĞĞ¡£add by itas109 2014-01-09 ÓëÉÏÃæliquanhaiÌí¼Ó·ÀËÀËøµÄ´úÂë²î²»¶à
+						   //return;///é˜²æ­¢è¯»å†™æ•°æ®æ—¶ï¼Œä¸²å£éæ­£å¸¸æ–­å¼€å¯¼è‡´æ­»å¾ªç¯ä¸€ç›´æ‰§è¡Œã€‚add by itas109 2014-01-09 ä¸ä¸Šé¢liquanhaiæ·»åŠ é˜²æ­»é”çš„ä»£ç å·®ä¸å¤š
 				}
 				}
 			}
-			else///ReadFile·µ»ØTRUE
+			else///ReadFileè¿”å›TRUE
 			{
 				// ReadFile() returned complete. It is not necessary to call GetOverlappedResults()
 				bRead = TRUE;
 			}
 		}  // close if (bRead)
 
-		///Òì²½IO²Ù×÷ÈÔÔÚ½øĞĞ£¬ĞèÒªµ÷ÓÃGetOverlappedResult²éÑ¯
+		///å¼‚æ­¥IOæ“ä½œä»åœ¨è¿›è¡Œï¼Œéœ€è¦è°ƒç”¨GetOverlappedResultæŸ¥è¯¢
 		if (!bRead)
 		{
 			bRead = TRUE;
@@ -1075,7 +1069,7 @@ void CSerialPort::ReceiveChar(CSerialPort* port)
 		LeaveCriticalSection(&port->m_csCommunicationSync);
 
 		// notify parent that a byte was received
-		//±ÜÃâÏß³Ì»¥ÏàµÈ´ı£¬²úÉúËÀËø£¬Ê¹ÓÃPostMessage()´úÌæSendMessage()
+		//é¿å…çº¿ç¨‹äº’ç›¸ç­‰å¾…ï¼Œäº§ç”Ÿæ­»é”ï¼Œä½¿ç”¨PostMessage()ä»£æ›¿SendMessage()
 		PostMessage(port->m_pOwner, WM_COMM_RXCHAR, (WPARAM)RXBuff, (LPARAM)port->m_nPortNr);
 		//::SendMessage((port->m_pOwner), Wm_SerialPort_RXCHAR, (WPARAM) RXBuff, (LPARAM) port->m_nPortNr);
 	} // end forever loop
@@ -1096,7 +1090,7 @@ void CSerialPort::ReceiveStr(CSerialPort* port)
 
 	for (;;)
 	{
-		//add by liquanhai 2011-11-06  ·ÀÖ¹ËÀËø
+		//add by liquanhai 2011-11-06  é˜²æ­¢æ­»é”
 		if (WaitForSingleObject(port->m_hShutdownEvent, 0) == WAIT_OBJECT_0)
 			return;
 
@@ -1108,7 +1102,7 @@ void CSerialPort::ReceiveStr(CSerialPort* port)
 
 		// ClearCommError() will update the COMSTAT structure and
 		// clear any other errors.
-		///¸üĞÂCOMSTAT
+		///æ›´æ–°COMSTAT
 
 		bResult = ClearCommError(port->m_hComm, &dwError, &comstat);
 
@@ -1124,34 +1118,34 @@ void CSerialPort::ReceiveStr(CSerialPort* port)
 		// as it is in my production code, but I have found this 
 		// solutiion to be the most efficient way to do this.
 
-		///ËùÓĞ×Ö·û¾ù±»¶Á³ö£¬ÖĞ¶ÏÑ­»·
-		//0xcccccccc±íÊ¾´®¿ÚÒì³£ÁË£¬»áµ¼ÖÂRXBuffÖ¸Õë³õÊ¼»¯´íÎó
+		///æ‰€æœ‰å­—ç¬¦å‡è¢«è¯»å‡ºï¼Œä¸­æ–­å¾ªç¯
+		//0xccccccccè¡¨ç¤ºä¸²å£å¼‚å¸¸äº†ï¼Œä¼šå¯¼è‡´RXBuffæŒ‡é’ˆåˆå§‹åŒ–é”™è¯¯
 		if (comstat.cbInQue == 0 || comstat.cbInQue == 0xcccccccc)
 		{
 			// break out when all bytes have been read
 			break;
 		}
 
-		//Èç¹ûÓöµ½'\0'£¬ÄÇÃ´Êı¾İ»á±»½Ø¶Ï£¬Êµ¼ÊÊı¾İÈ«²¿¶ÁÈ¡Ö»ÊÇÃ»ÓĞÏÔÊ¾ÍêÈ«£¬Õâ¸öÊ±ºòÊ¹ÓÃmemcpy²ÅÄÜÈ«²¿»ñÈ¡
+		//å¦‚æœé‡åˆ°'\0'ï¼Œé‚£ä¹ˆæ•°æ®ä¼šè¢«æˆªæ–­ï¼Œå®é™…æ•°æ®å…¨éƒ¨è¯»å–åªæ˜¯æ²¡æœ‰æ˜¾ç¤ºå®Œå…¨ï¼Œè¿™ä¸ªæ—¶å€™ä½¿ç”¨memcpyæ‰èƒ½å…¨éƒ¨è·å–
 		unsigned char* RXBuff = new unsigned char[comstat.cbInQue + 1];
 		if (RXBuff == NULL)
 		{
 			return;
 		}
-		RXBuff[comstat.cbInQue] = '\0';//¸½¼Ó×Ö·û´®½áÊø·û
+		RXBuff[comstat.cbInQue] = '\0';//é™„åŠ å­—ç¬¦ä¸²ç»“æŸç¬¦
 
 		EnterCriticalSection(&port->m_csCommunicationSync);
 
 		if (bRead)
 		{
-			///´®¿Ú¶Á³ö£¬¶Á³ö»º³åÇøÖĞ×Ö½Ú
+			///ä¸²å£è¯»å‡ºï¼Œè¯»å‡ºç¼“å†²åŒºä¸­å­—èŠ‚
 			bResult = ReadFile(port->m_hComm,		// Handle to COMM port 
 				RXBuff,				// RX Buffer Pointer
 				comstat.cbInQue,					// Read cbInQue len byte
 				&BytesRead,			// Stores number of bytes read
 				&port->m_ov);		// pointer to the m_ov structure
 			// deal with the error code 
-			///Èô·µ»Ø´íÎó£¬´íÎó´¦Àí
+			///è‹¥è¿”å›é”™è¯¯ï¼Œé”™è¯¯å¤„ç†
 			if (!bResult)
 			{
 				switch (dwError = GetLastError())
@@ -1160,28 +1154,28 @@ void CSerialPort::ReceiveStr(CSerialPort* port)
 				{
 										 // asynchronous i/o is still in progress 
 										 // Proceed on to GetOverlappedResults();
-										 ///Òì²½IOÈÔÔÚ½øĞĞ
+										 ///å¼‚æ­¥IOä»åœ¨è¿›è¡Œ
 										 bRead = FALSE;
 										 break;
 				}
-				case ERROR_ACCESS_DENIED:///¾Ü¾ø·ÃÎÊ erroe code:5
+				case ERROR_ACCESS_DENIED:///æ‹’ç»è®¿é—® erroe code:5
 				{
 											 port->m_hComm = INVALID_HANDLE_VALUE;
 											 TCHAR Temp[200] = { 0 };
-											 _stprintf_s(Temp, 200, _T("COM%d ERROR_ACCESS_DENIED£¬ReadFile() Error Code:%d"), port->m_nPortNr, GetLastError());
+											 _stprintf_s(Temp, 200, _T("COM%d ERROR_ACCESS_DENIEDï¼ŒReadFile() Error Code:%d"), port->m_nPortNr, GetLastError());
 											 MessageBox(NULL, Temp, _T("COM ReadFile Error"), MB_ICONERROR);
 											 break;
 				}
-				case ERROR_INVALID_HANDLE:///´ò¿ª´®¿ÚÊ§°Ü erroe code:6
+				case ERROR_INVALID_HANDLE:///æ‰“å¼€ä¸²å£å¤±è´¥ erroe code:6
 				{
 											  port->m_hComm = INVALID_HANDLE_VALUE;
 											  break;
 				}
-				case ERROR_BAD_COMMAND:///Á¬½Ó¹ı³ÌÖĞ·Ç·¨¶Ï¿ª erroe code:22
+				case ERROR_BAD_COMMAND:///è¿æ¥è¿‡ç¨‹ä¸­éæ³•æ–­å¼€ erroe code:22
 				{
 										   port->m_hComm = INVALID_HANDLE_VALUE;
 										   TCHAR Temp[200] = { 0 };
-										   _stprintf_s(Temp, 200, _T("COM%d ERROR_BAD_COMMAND£¬ReadFile() Error Code:%d"), port->m_nPortNr, GetLastError());
+										   _stprintf_s(Temp, 200, _T("COM%d ERROR_BAD_COMMANDï¼ŒReadFile() Error Code:%d"), port->m_nPortNr, GetLastError());
 										   MessageBox(NULL, Temp, _T("COM ReadFile Error"), MB_ICONERROR);
 										   break;
 				}
@@ -1190,18 +1184,18 @@ void CSerialPort::ReceiveStr(CSerialPort* port)
 						   // Another error has occured.  Process this error.
 						   port->ProcessErrorMessage(_T("ReadFile()"));
 						   break;
-						   //return;///·ÀÖ¹¶ÁĞ´Êı¾İÊ±£¬´®¿Ú·ÇÕı³£¶Ï¿ªµ¼ÖÂËÀÑ­»·Ò»Ö±Ö´ĞĞ¡£add by itas109 2014-01-09 ÓëÉÏÃæliquanhaiÌí¼Ó·ÀËÀËøµÄ´úÂë²î²»¶à
+						   //return;///é˜²æ­¢è¯»å†™æ•°æ®æ—¶ï¼Œä¸²å£éæ­£å¸¸æ–­å¼€å¯¼è‡´æ­»å¾ªç¯ä¸€ç›´æ‰§è¡Œã€‚add by itas109 2014-01-09 ä¸ä¸Šé¢liquanhaiæ·»åŠ é˜²æ­»é”çš„ä»£ç å·®ä¸å¤š
 				}
 				}
 			}
-			else///ReadFile·µ»ØTRUE
+			else///ReadFileè¿”å›TRUE
 			{
 				// ReadFile() returned complete. It is not necessary to call GetOverlappedResults()
 				bRead = TRUE;
 			}
 		}  // close if (bRead)
 
-		///Òì²½IO²Ù×÷ÈÔÔÚ½øĞĞ£¬ĞèÒªµ÷ÓÃGetOverlappedResult²éÑ¯
+		///å¼‚æ­¥IOæ“ä½œä»åœ¨è¿›è¡Œï¼Œéœ€è¦è°ƒç”¨GetOverlappedResultæŸ¥è¯¢
 		if (!bRead)
 		{
 			bRead = TRUE;
@@ -1224,7 +1218,7 @@ void CSerialPort::ReceiveStr(CSerialPort* port)
 		// notify parent that some byte was received
 		::SendMessage((port->m_pOwner), WM_COMM_RXSTR, (WPARAM)RXBuff, (LPARAM)&commInfo);
 
-		//ÊÍ·Å
+		//é‡Šæ”¾
 		delete[] RXBuff;
 		RXBuff = NULL;
 
@@ -1258,20 +1252,20 @@ DWORD CSerialPort::GetWriteBufferSize()
 
 BOOL CSerialPort::IsOpened()
 {
-	return m_hComm != NULL && m_hComm != INVALID_HANDLE_VALUE;//m_hCommÔö¼ÓINVALID_HANDLE_VALUEµÄÇé¿ö add by itas109 2016-07-29
+	return m_hComm != NULL && m_hComm != INVALID_HANDLE_VALUE;//m_hCommå¢åŠ INVALID_HANDLE_VALUEçš„æƒ…å†µ add by itas109 2016-07-29
 }
 
 void CSerialPort::ClosePort()
 {
 	MSG message;
 
-	//Ôö¼ÓÏß³Ì¹ÒÆğÅĞ¶Ï£¬½â¾öÓÉÓÚÏß³Ì¹ÒÆğµ¼ÖÂ´®¿Ú¹Ø±ÕËÀËøµÄÎÊÌâ add by itas109 2016-06-29
+	//å¢åŠ çº¿ç¨‹æŒ‚èµ·åˆ¤æ–­ï¼Œè§£å†³ç”±äºçº¿ç¨‹æŒ‚èµ·å¯¼è‡´ä¸²å£å…³é—­æ­»é”çš„é—®é¢˜ add by itas109 2016-06-29
 	if (IsThreadSuspend(m_Thread))
 	{
 		ResumeThread(m_Thread);
 	}
 
-	//´®¿Ú¾ä±úÎŞĞ§  add by itas109 2016-07-29
+	//ä¸²å£å¥æŸ„æ— æ•ˆ  add by itas109 2016-07-29
 	if (m_hComm == INVALID_HANDLE_VALUE)
 	{
 		CloseHandle(m_hComm);
@@ -1282,7 +1276,7 @@ void CSerialPort::ClosePort()
 	do
 	{
 		SetEvent(m_hShutdownEvent);
-		//add by liquanhai  ·ÀÖ¹ËÀËø  2011-11-06
+		//add by liquanhai  é˜²æ­¢æ­»é”  2011-11-06
 		if (::PeekMessage(&message, m_pOwner, 0, 0, PM_REMOVE))
 		{
 			::TranslateMessage(&message);
@@ -1290,7 +1284,7 @@ void CSerialPort::ClosePort()
 		}
 	} while (m_bThreadAlive);
 
-	//´Ë´¦µÄÑÓÊ±ºÜÖØÒª£¬ÒòÎªÈç¹û´®¿Ú¿ª×Å£¬·¢ËÍ¹Ø±ÕÖ¸Áîµ½³¹µ×¹Ø±ÕĞèÒªÒ»¶¨µÄÊ±¼ä£¬Õâ¸öÑÓÊ±Ó¦¸Ã¸úµçÄÔµÄĞÔÄÜÏà¹Ø
+	//æ­¤å¤„çš„å»¶æ—¶å¾ˆé‡è¦ï¼Œå› ä¸ºå¦‚æœä¸²å£å¼€ç€ï¼Œå‘é€å…³é—­æŒ‡ä»¤åˆ°å½»åº•å…³é—­éœ€è¦ä¸€å®šçš„æ—¶é—´ï¼Œè¿™ä¸ªå»¶æ—¶åº”è¯¥è·Ÿç”µè„‘çš„æ€§èƒ½ç›¸å…³
 	Sleep(50);//add by itas109 2016-08-02
 
 	// if the port is still opened: close it 
@@ -1382,7 +1376,7 @@ CSerialPortInfo::~CSerialPortInfo()
 std::list<std::string> CSerialPortInfo::availablePorts()
 {
 	std::list<std::string> portsList;
-	///½öÊÇXP/Win7ÏµÍ³µÄ×¢²á±íÎ»ÖÃ£¬ÆäËûÏµÍ³¸ù¾İÊµ¼ÊÇé¿ö×öĞŞ¸Ä
+	///ä»…æ˜¯XP/Win7ç³»ç»Ÿçš„æ³¨å†Œè¡¨ä½ç½®ï¼Œå…¶ä»–ç³»ç»Ÿæ ¹æ®å®é™…æƒ…å†µåšä¿®æ”¹
 	std::string m_regKeyPath = std::string("HARDWARE\\DEVICEMAP\\SERIALCOMM");
 	getRegKeyValues(m_regKeyPath, portsList);
 	return portsList;
