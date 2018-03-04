@@ -15,117 +15,117 @@
 ************************************************************************************
 **  author: mrlong date:2007-12-25
 **
-**  ¸Ä½ø
-**	1) Ôö¼Ó ClosePort
-**	2) Ôö¼Ó WriteToPort Á½¸ö·½·¨
-**	3) Ôö¼Ó SendData Óë RecvData ·½·¨
+**  æ”¹è¿›
+**	1) å¢åŠ  ClosePort
+**	2) å¢åŠ  WriteToPort ä¸¤ä¸ªæ–¹æ³•
+**	3) å¢åŠ  SendData ä¸ RecvData æ–¹æ³•
 **************************************************************************************
 ***************************************************************************************
-**  author£ºliquanhai date:2011-11-06
+**  authorï¼šliquanhai date:2011-11-06
 **
-**  ¸Ä½ø
-**	1) Ôö¼Ó ClosePort ÖĞ½»³ö¿ØÖÆÈ¨£¬·ÀÖ¹ËÀËøÎÊÌâ
-**	2) Ôö¼Ó ReceiveChar ÖĞ·ÀÖ¹Ïß³ÌËÀËø
+**  æ”¹è¿›
+**	1) å¢åŠ  ClosePort ä¸­äº¤å‡ºæ§åˆ¶æƒï¼Œé˜²æ­¢æ­»é”é—®é¢˜
+**	2) å¢åŠ  ReceiveChar ä¸­é˜²æ­¢çº¿ç¨‹æ­»é”
 **************************************************************************************
 ***************************************************************************************
-**  author£ºviruscamp date:2013-12-04
+**  authorï¼šviruscamp date:2013-12-04
 **
-**  ¸Ä½ø
-**	1) Ôö¼Ó IsOpen ÅĞ¶ÏÊÇ·ñ´ò¿ª
-**	2) ĞŞÕı InitPort ÖĞ parity Odd Even ²ÎÊıÈ¡Öµ´íÎó
-**	3) ĞŞ¸Ä InitPort ÖĞ portnr È¡Öµ·¶Î§£¬portnr>9 Ê±ÌØÊâ´¦Àí
-**	4) È¡Ïû¶Ô MFC µÄÒÀÀµ£¬Ê¹ÓÃ HWND Ìæ´ú CWnd£¬Ê¹ÓÃ win32 thread º¯Êı¶ø²»ÊÇ MFC µÄ
-**	5) Ôö¼ÓÓÃ»§ÏûÏ¢±àºÅ×Ô¶¨Òå£¬·½·¨À´×Ô CnComm
+**  æ”¹è¿›
+**	1) å¢åŠ  IsOpen åˆ¤æ–­æ˜¯å¦æ‰“å¼€
+**	2) ä¿®æ­£ InitPort ä¸­ parity Odd Even å‚æ•°å–å€¼é”™è¯¯
+**	3) ä¿®æ”¹ InitPort ä¸­ portnr å–å€¼èŒƒå›´ï¼Œportnr>9 æ—¶ç‰¹æ®Šå¤„ç†
+**	4) å–æ¶ˆå¯¹ MFC çš„ä¾èµ–ï¼Œä½¿ç”¨ HWND æ›¿ä»£ CWndï¼Œä½¿ç”¨ win32 thread å‡½æ•°è€Œä¸æ˜¯ MFC çš„
+**	5) å¢åŠ ç”¨æˆ·æ¶ˆæ¯ç¼–å·è‡ªå®šä¹‰ï¼Œæ–¹æ³•æ¥è‡ª CnComm
 ***************************************************************************************
 ***************************************************************************************
 **  author: itas109  date:2014-01-10
-**  Blog£ºblog.csdn.net/itas109
+**  Blogï¼šblog.csdn.net/itas109
 **
-**  ¸Ä½ø
-**    1) ½â¾öCOM10ÒÔÉÏ¶Ë¿ÚÎŞ·¨ÏÔÊ¾µÄÎÊÌâ
-**    2) À©Õ¹¿ÉÑ¡Ôñ¶Ë¿Ú£¬×î´óÖµMaxSerialPortNum¿ÉÒÔ×Ô¶¨Òå
-**    3) Ìí¼ÓQueryKey()ºÍHkey2ComboBoxÁ½¸ö·½·¨£¬ÓÃÓÚ×Ô¶¯²éÑ¯µ±Ç°ÓĞĞ§µÄ´®¿ÚºÅ¡£
+**  æ”¹è¿›
+**    1) è§£å†³COM10ä»¥ä¸Šç«¯å£æ— æ³•æ˜¾ç¤ºçš„é—®é¢˜
+**    2) æ‰©å±•å¯é€‰æ‹©ç«¯å£ï¼Œæœ€å¤§å€¼MaxSerialPortNumå¯ä»¥è‡ªå®šä¹‰
+**    3) æ·»åŠ QueryKey()å’ŒHkey2ComboBoxä¸¤ä¸ªæ–¹æ³•ï¼Œç”¨äºè‡ªåŠ¨æŸ¥è¯¢å½“å‰æœ‰æ•ˆçš„ä¸²å£å·ã€‚
 ***************************************************************************************
 **  author: itas109  date:2016-05-06
-**  Blog£ºblog.csdn.net/itas109
+**  Blogï¼šblog.csdn.net/itas109
 **
-**  ¸Ä½ø
-**    1) ĞŞ¸´Ã¿´Î´ò¿ª´®¿Ú·¢ËÍÒ»´Î£¬µ±´®¿ÚÎŞÓ¦´ğÊ±£¬ĞèÒª¹Ø±ÕÔÙ´ò¿ª»òÕß½ÓÊÕÍêÊı¾İ²ÅÄÜ·¢ËÍµÄÎÊÌâ¡£
-**		 ½â¾ö°ì·¨£ºÔÚm_hEventArrayÖĞµ÷Õûm_hWriteEventµÄÓÅÏÈ¼¶¸ßÓÚ¶ÁµÄÓÅÏÈ¼¶¡£CommThread(LPVOID pParam)º¯ÊıÖĞ¶ÁĞ´µÄÎ»ÖÃÒ²µ÷»»¡£
-**		 ²Î¿¼£ºhttp://zhidao.baidu.com/link?url=RSrbPcfTZRULFFd2ziHZPBwnoXv1iCSu_Nmycb_yEw1mklT8gkoNZAkWpl3UDhk8L35DtRPo5VV5kEGpOx-Gea
-**    2) ĞŞ¸´Í£Ö¹Î»ÔÚÍ·ÎÄ¼şÖĞ¶¨Òå³É1µ¼ÖÂSetCommState±¨´íµÄÎÊÌâ£¬Ó¦Îª1¶ÔÓ¦µÄÍ£Ö¹Î»ÊÇ1.5¡£UINT stopsbits = ONESTOPBIT
-**    3) switch(stopbits)ºÍswitch(parity)Ôö¼ÓÄ¬ÈÏÇé¿ö£¬ÔöÇ¿³ÌĞò½¡×³ĞÔ
+**  æ”¹è¿›
+**    1) ä¿®å¤æ¯æ¬¡æ‰“å¼€ä¸²å£å‘é€ä¸€æ¬¡ï¼Œå½“ä¸²å£æ— åº”ç­”æ—¶ï¼Œéœ€è¦å…³é—­å†æ‰“å¼€æˆ–è€…æ¥æ”¶å®Œæ•°æ®æ‰èƒ½å‘é€çš„é—®é¢˜ã€‚
+**		 è§£å†³åŠæ³•ï¼šåœ¨m_hEventArrayä¸­è°ƒæ•´m_hWriteEventçš„ä¼˜å…ˆçº§é«˜äºè¯»çš„ä¼˜å…ˆçº§ã€‚CommThread(LPVOID pParam)å‡½æ•°ä¸­è¯»å†™çš„ä½ç½®ä¹Ÿè°ƒæ¢ã€‚
+**		 å‚è€ƒï¼šhttp://zhidao.baidu.com/link?url=RSrbPcfTZRULFFd2ziHZPBwnoXv1iCSu_Nmycb_yEw1mklT8gkoNZAkWpl3UDhk8L35DtRPo5VV5kEGpOx-Gea
+**    2) ä¿®å¤åœæ­¢ä½åœ¨å¤´æ–‡ä»¶ä¸­å®šä¹‰æˆ1å¯¼è‡´SetCommStateæŠ¥é”™çš„é—®é¢˜ï¼Œåº”ä¸º1å¯¹åº”çš„åœæ­¢ä½æ˜¯1.5ã€‚UINT stopsbits = ONESTOPBIT
+**    3) switch(stopbits)å’Œswitch(parity)å¢åŠ é»˜è®¤æƒ…å†µï¼Œå¢å¼ºç¨‹åºå¥å£®æ€§
 ** ***************************************************************************************
 **  author: itas109  date:2016-06-22
-**  Blog£ºblog.csdn.net/itas109
+**  Blogï¼šblog.csdn.net/itas109
 **
-**  ¸Ä½ø
-**  1£© Ôö¼ÓReceiveStr·½·¨£¬ÓÃÓÚ½ÓÊÕ×Ö·û´®£¨½ÓÊÕ»º³åÇøÓĞ¶àÉÙ×Ö·û¾Í½ÓÊÕ¶àÉÙ×Ö·û£©¡£
-**      ½â¾öReceiveCharÖ»ÄÜ½ÓÊÕµ¥¸ö×Ö·ûµÄÎÊÌâ¡£
+**  æ”¹è¿›
+**  1ï¼‰ å¢åŠ ReceiveStræ–¹æ³•ï¼Œç”¨äºæ¥æ”¶å­—ç¬¦ä¸²ï¼ˆæ¥æ”¶ç¼“å†²åŒºæœ‰å¤šå°‘å­—ç¬¦å°±æ¥æ”¶å¤šå°‘å­—ç¬¦ï¼‰ã€‚
+**      è§£å†³ReceiveCharåªèƒ½æ¥æ”¶å•ä¸ªå­—ç¬¦çš„é—®é¢˜ã€‚
 ** ***************************************************************************************
 **  author: itas109  date:2016-06-29
-**  Blog£ºblog.csdn.net/itas109
+**  Blogï¼šblog.csdn.net/itas109
 **
-**  ¸Ä½ø
-**  1£© ½â¾öRestartMonitoring·½·¨ºÍStopMonitoring·½·¨ÃüÁî²»×¼È·ÒıÆğµÄÆçÒå£¬¸ù¾İÊµ¼Ê×÷ÓÃ¡£
-**		½«RestartMonitoring¸ü¸ÄÎªResumeMonitoring£¬½«StopMonitoring¸ü¸ÄÎªSuspendMonitoring¡£
-**	2£© Ôö¼ÓIsThreadSuspend·½·¨£¬ÓÃÓÚÅĞ¶ÏÏß³ÌÊÇ·ñ¹ÒÆğ¡£
-**	3£© ¸Ä½øClosePort·½·¨£¬Ôö¼ÓÏß³Ì¹ÒÆğÅĞ¶Ï£¬½â¾öÓÉÓÚÏß³Ì¹ÒÆğµ¼ÖÂ´®¿Ú¹Ø±ÕËÀËøµÄÎÊÌâ¡£
-**  4£© Ôö¼ÓIsReceiveStringºê¶¨Òå£¬ÓÃÓÚ½ÓÊÕÊ±²ÉÓÃµ¥×Ö½Ú½ÓÊÕ»¹ÊÇ¶à×Ö½Ú½ÓÊÕ
+**  æ”¹è¿›
+**  1ï¼‰ è§£å†³RestartMonitoringæ–¹æ³•å’ŒStopMonitoringæ–¹æ³•å‘½ä»¤ä¸å‡†ç¡®å¼•èµ·çš„æ­§ä¹‰ï¼Œæ ¹æ®å®é™…ä½œç”¨ã€‚
+**		å°†RestartMonitoringæ›´æ”¹ä¸ºResumeMonitoringï¼Œå°†StopMonitoringæ›´æ”¹ä¸ºSuspendMonitoringã€‚
+**	2ï¼‰ å¢åŠ IsThreadSuspendæ–¹æ³•ï¼Œç”¨äºåˆ¤æ–­çº¿ç¨‹æ˜¯å¦æŒ‚èµ·ã€‚
+**	3ï¼‰ æ”¹è¿›ClosePortæ–¹æ³•ï¼Œå¢åŠ çº¿ç¨‹æŒ‚èµ·åˆ¤æ–­ï¼Œè§£å†³ç”±äºçº¿ç¨‹æŒ‚èµ·å¯¼è‡´ä¸²å£å…³é—­æ­»é”çš„é—®é¢˜ã€‚
+**  4ï¼‰ å¢åŠ IsReceiveStringå®å®šä¹‰ï¼Œç”¨äºæ¥æ”¶æ—¶é‡‡ç”¨å•å­—èŠ‚æ¥æ”¶è¿˜æ˜¯å¤šå­—èŠ‚æ¥æ”¶
 ** ***************************************************************************************
 **  author: itas109  date:2016-08-02
-**  Blog£ºblog.csdn.net/itas109
-**  ¸Ä½ø
-**  1£© ¸Ä½øIsOpen·½·¨£¬m_hCommÔö¼ÓINVALID_HANDLE_VALUEµÄÇé¿ö£¬ÒòÎªCreateFile·½·¨Ê§°Ü·µ»ØµÄÊÇINVALID_HANDLE_VALUE£¬²»ÊÇNULL
-**  2£© ¸Ä½øClosePort·½·¨£ºÔö¼Ó´®¿Ú¾ä±úÎŞĞ§µÄÅĞ¶Ï(·ÀÖ¹¹Ø±ÕËÀËø)£»m_hWriteEvent²»Ê¹ÓÃCloseHandle¹Ø±Õ
-**  3£© ¸Ä½øCommThread¡¢ReceiveChar¡¢ReceiveStrºÍWriteChar·½·¨ÖĞÒì³£´¦ÀíµÄÅĞ¶Ï£¬Ôö¼ÓÈıÖÖÅĞ¶Ï£º´®¿Ú´ò¿ªÊ§°Ü(error code:ERROR_INVALID_HANDLE)¡¢Á¬½Ó¹ı³ÌÖĞ·Ç·¨¶Ï¿ª(error code:ERROR_BAD_COMMAND)ºÍ¾Ü¾ø·ÃÎÊ(error code:ERROR_ACCESS_DENIED)
-**  4£© ²ÉÓÃ°²È«º¯Êısprintf_sºÍstrcpy_sº¯ÊıÌæ»»µôsprintfºÍstrcpy
-**  5£© ¸Ä½øQueryKey·½·¨£¬ÓÃÓÚ²éÑ¯×¢²á±íµÄ¿ÉÓÃ´®¿ÚÖµ£¬¿ÉÒÔËÑË÷µ½ÈÎÒâµÄ¿ÉÓÃ´®¿Ú
-**  6£© ¸Ä½øInitPort·½·¨£¬´®¿Ú´ò¿ªÊ§°Ü£¬Ôö¼ÓÌáÊ¾ĞÅÏ¢:´®¿Ú²»´æÔÚ(error code:ERROR_FILE_NOT_FOUND)ºÍ´®¿Ú¾Ü¾ø·ÃÎÊ(error code:ERROR_ACCESS_DENIED)
-**  7£© ¼ÓÈëviruscamp È¡Ïû¶Ô MFC µÄÒÀÀµ
-**  8£© ¸Ä½øInitPort·½·¨£¬Èç¹ûÉÏ´Î´®¿ÚÊÇ´ò¿ª£¬ÔÙ´Îµ÷ÓÃInitPort·½·¨£¬¹Ø±Õ´®¿ÚĞèÒª×öÒ»¶¨µÄÑÓÊ±£¬·ñÔòÓĞ¼¸ÂÊµ¼ÖÂERROR_ACCESS_DENIED¾Ü¾ø·ÃÎÊ£¬Ò²¾ÍÊÇ´®¿ÚÕ¼ÓÃÎÊÌâ
-**  9£© ³õÊ¼»¯Ä¬ÈÏ²¨ÌØÂÊĞŞ¸ÄÎª9600
-**  10£©ĞŞ¸´Ò»Ğ©ÊÍ·ÅµÄBUG
-**  11£©¹æ·¶ÁËÒ»Ğ©´íÎóĞÅÏ¢£¬²Î¿¼winerror.h --  error code definitions for the Win32 API functions
+**  Blogï¼šblog.csdn.net/itas109
+**  æ”¹è¿›
+**  1ï¼‰ æ”¹è¿›IsOpenæ–¹æ³•ï¼Œm_hCommå¢åŠ INVALID_HANDLE_VALUEçš„æƒ…å†µï¼Œå› ä¸ºCreateFileæ–¹æ³•å¤±è´¥è¿”å›çš„æ˜¯INVALID_HANDLE_VALUEï¼Œä¸æ˜¯NULL
+**  2ï¼‰ æ”¹è¿›ClosePortæ–¹æ³•ï¼šå¢åŠ ä¸²å£å¥æŸ„æ— æ•ˆçš„åˆ¤æ–­(é˜²æ­¢å…³é—­æ­»é”)ï¼›m_hWriteEventä¸ä½¿ç”¨CloseHandleå…³é—­
+**  3ï¼‰ æ”¹è¿›CommThreadã€ReceiveCharã€ReceiveStrå’ŒWriteCharæ–¹æ³•ä¸­å¼‚å¸¸å¤„ç†çš„åˆ¤æ–­ï¼Œå¢åŠ ä¸‰ç§åˆ¤æ–­ï¼šä¸²å£æ‰“å¼€å¤±è´¥(error code:ERROR_INVALID_HANDLE)ã€è¿æ¥è¿‡ç¨‹ä¸­éæ³•æ–­å¼€(error code:ERROR_BAD_COMMAND)å’Œæ‹’ç»è®¿é—®(error code:ERROR_ACCESS_DENIED)
+**  4ï¼‰ é‡‡ç”¨å®‰å…¨å‡½æ•°sprintf_så’Œstrcpy_så‡½æ•°æ›¿æ¢æ‰sprintfå’Œstrcpy
+**  5ï¼‰ æ”¹è¿›QueryKeyæ–¹æ³•ï¼Œç”¨äºæŸ¥è¯¢æ³¨å†Œè¡¨çš„å¯ç”¨ä¸²å£å€¼ï¼Œå¯ä»¥æœç´¢åˆ°ä»»æ„çš„å¯ç”¨ä¸²å£
+**  6ï¼‰ æ”¹è¿›InitPortæ–¹æ³•ï¼Œä¸²å£æ‰“å¼€å¤±è´¥ï¼Œå¢åŠ æç¤ºä¿¡æ¯:ä¸²å£ä¸å­˜åœ¨(error code:ERROR_FILE_NOT_FOUND)å’Œä¸²å£æ‹’ç»è®¿é—®(error code:ERROR_ACCESS_DENIED)
+**  7ï¼‰ åŠ å…¥viruscamp å–æ¶ˆå¯¹ MFC çš„ä¾èµ–
+**  8ï¼‰ æ”¹è¿›InitPortæ–¹æ³•ï¼Œå¦‚æœä¸Šæ¬¡ä¸²å£æ˜¯æ‰“å¼€ï¼Œå†æ¬¡è°ƒç”¨InitPortæ–¹æ³•ï¼Œå…³é—­ä¸²å£éœ€è¦åšä¸€å®šçš„å»¶æ—¶ï¼Œå¦åˆ™æœ‰å‡ ç‡å¯¼è‡´ERROR_ACCESS_DENIEDæ‹’ç»è®¿é—®ï¼Œä¹Ÿå°±æ˜¯ä¸²å£å ç”¨é—®é¢˜
+**  9ï¼‰ åˆå§‹åŒ–é»˜è®¤æ³¢ç‰¹ç‡ä¿®æ”¹ä¸º9600
+**  10ï¼‰ä¿®å¤ä¸€äº›é‡Šæ”¾çš„BUG
+**  11ï¼‰è§„èŒƒäº†ä¸€äº›é”™è¯¯ä¿¡æ¯ï¼Œå‚è€ƒwinerror.h --  error code definitions for the Win32 API functions
 ** ***************************************************************************************
 **  author: itas109  date:2016-08-10
-**  Blog£ºblog.csdn.net/itas109
-**  ¸Ä½ø
-**  1£© ¸Ä½øReceiveStr·½·¨£¬comstat.cbInQue = 0xccccccccµÄÇé¿ö£¨Èç´®¿ÚÒì³£¶Ï¿ª£©£¬»áµ¼ÖÂRXBuff³õÊ¼»¯Ê§°Ü
+**  Blogï¼šblog.csdn.net/itas109
+**  æ”¹è¿›
+**  1ï¼‰ æ”¹è¿›ReceiveStræ–¹æ³•ï¼Œcomstat.cbInQue = 0xccccccccçš„æƒ…å†µï¼ˆå¦‚ä¸²å£å¼‚å¸¸æ–­å¼€ï¼‰ï¼Œä¼šå¯¼è‡´RXBuffåˆå§‹åŒ–å¤±è´¥
 ** ***************************************************************************************
 **  author: itas109  date:2017-02-14
-**  Blog£ºblog.csdn.net/itas109
-**  ¸Ä½ø
-**  1)  ¼æÈİASCIIºÍUNICODE±àÂë
-**  2)  ReceiveStrº¯ÊıÖĞ·¢ËÍº¯ÊıSendMessageµÄµÚ¶ş¸ö²ÎÊı²ÉÓÃ½á¹¹ÌåĞÎÊ½£¬°üÀ¨portNr´®¿ÚºÅºÍbytesRead¶ÁÈ¡µÄ×Ö½ÚÊı£¬¿ÉÒÔ´¦Àí16½øÖÆµÄÊ±ºò0x00½Ø¶ÏÎÊÌâ
-**  3)  ¾«¼ò²»±ØÒªµÄº¯ÊıSendDataºÍRecvData
-**  4)  ¾¡Á¿µÄÈ¡Ïû¶Ô MFC µÄÒÀÀµ£¬Hkey2ComboBoxº¯ÊıÔİÊ±±£Áô
-**  5)  ÆäËûĞ¡ÎÊÌâĞŞ¸Ä
+**  Blogï¼šblog.csdn.net/itas109
+**  æ”¹è¿›
+**  1)  å…¼å®¹ASCIIå’ŒUNICODEç¼–ç 
+**  2)  ReceiveStrå‡½æ•°ä¸­å‘é€å‡½æ•°SendMessageçš„ç¬¬äºŒä¸ªå‚æ•°é‡‡ç”¨ç»“æ„ä½“å½¢å¼ï¼ŒåŒ…æ‹¬portNrä¸²å£å·å’ŒbytesReadè¯»å–çš„å­—èŠ‚æ•°ï¼Œå¯ä»¥å¤„ç†16è¿›åˆ¶çš„æ—¶å€™0x00æˆªæ–­é—®é¢˜
+**  3)  ç²¾ç®€ä¸å¿…è¦çš„å‡½æ•°SendDataå’ŒRecvData
+**  4)  å°½é‡çš„å–æ¶ˆå¯¹ MFC çš„ä¾èµ–ï¼ŒHkey2ComboBoxå‡½æ•°æš‚æ—¶ä¿ç•™
+**  5)  å…¶ä»–å°é—®é¢˜ä¿®æ”¹
 ** ***************************************************************************************
 **  author: itas109  date:2017-03-12
-**  Blog£ºblog.csdn.net/itas109
-**  ¸Ä½ø
-**  1)  Ôö¼Óºê¶¨Òå_AFX£¬ÓÃÓÚ´¦ÀíMFCµÄ±ØÒªº¯ÊıHkey2ComboBox
-**  2)  ½øÒ»²½È¥³ıMFCÒÀÀµ£¬ĞŞ¸ÄAfxMessageBoxº¯Êı
+**  Blogï¼šblog.csdn.net/itas109
+**  æ”¹è¿›
+**  1)  å¢åŠ å®å®šä¹‰_AFXï¼Œç”¨äºå¤„ç†MFCçš„å¿…è¦å‡½æ•°Hkey2ComboBox
+**  2)  è¿›ä¸€æ­¥å»é™¤MFCä¾èµ–ï¼Œä¿®æ”¹AfxMessageBoxå‡½æ•°
 ** ***************************************************************************************
 **  author: itas109  date:2017-12-16
-**  Blog£ºblog.csdn.net/itas109
-**  ¸Ä½ø
-**	1)	Ö§³ÖDLLÊä³ö
-**  2)  È¥³ıQueryKeyºÍHkey2ComboBox£¬²ÉÓÃCSerialPortInfo::availablePorts()º¯Êı´úÌæ
-**  3)  Ôö¼ÓCSerialPortInfoÀà£¬Ä¿Ç°Ö»ÓĞavailablePorts¾²Ì¬º¯Êı£¬ÓÃÓÚ»ñÈ¡»îÔ¾µÄ´®¿Úµ½list
-**  4)  Ôö¼ÓÃüÃû¿Õ¼äitas109
-**  5)  ¾«¼ò²»±ØÒªµÄÍ·ÎÄ¼ş
-**  6)	InitPortºÍ~CSerialPort()ÖĞÖ±½ÓÕûºÏClosePort()
+**  Blogï¼šblog.csdn.net/itas109
+**  æ”¹è¿›
+**	1)	æ”¯æŒDLLè¾“å‡º
+**  2)  å»é™¤QueryKeyå’ŒHkey2ComboBoxï¼Œé‡‡ç”¨CSerialPortInfo::availablePorts()å‡½æ•°ä»£æ›¿
+**  3)  å¢åŠ CSerialPortInfoç±»ï¼Œç›®å‰åªæœ‰availablePortsé™æ€å‡½æ•°ï¼Œç”¨äºè·å–æ´»è·ƒçš„ä¸²å£åˆ°list
+**  4)  å¢åŠ å‘½åç©ºé—´itas109
+**  5)  ç²¾ç®€ä¸å¿…è¦çš„å¤´æ–‡ä»¶
+**  6)	InitPortå’Œ~CSerialPort()ä¸­ç›´æ¥æ•´åˆClosePort()
 ** ***************************************************************************************
 **  author: itas109  date:2018-02-14
-**  Blog£ºblog.csdn.net/itas109
-**  ¸Ä½ø
-**	1)	¡ïĞŞ¸´²»ÄÜÁ¬Ğø·¢ËÍµÄÎÊÌâ ¡ï fix can not continue send error
-**  2)  ¡ïÒ»´ÎĞÔĞ´Èë¾¡¿ÉÄÜ¶àµÄÊı¾İµ½´®¿Ú ¡ï try best to send mutil data once in WriteChar funtion
-**  3)  ĞŞ¸´BYTEÄÚ´æÉèÖÃµÄÎÊÌâ fix BYTE memset error
-**  4)  ÔÚ¹¹Ôìº¯ÊıÖĞ³õÊ¼»¯ºÍÊÍ·ÅÁÙ½çÇø initialize and delete critical section in Constructor
-**  5)  ¾«¼ò´úÂë
+**  Blogï¼šblog.csdn.net/itas109
+**  æ”¹è¿›
+**	1)	â˜…ä¿®å¤ä¸èƒ½è¿ç»­å‘é€çš„é—®é¢˜ â˜… fix can not continue send error
+**  2)  â˜…ä¸€æ¬¡æ€§å†™å…¥å°½å¯èƒ½å¤šçš„æ•°æ®åˆ°ä¸²å£ â˜… try best to send mutil data once in WriteChar funtion
+**  3)  ä¿®å¤BYTEå†…å­˜è®¾ç½®çš„é—®é¢˜ fix BYTE memset error
+**  4)  åœ¨æ„é€ å‡½æ•°ä¸­åˆå§‹åŒ–å’Œé‡Šæ”¾ä¸´ç•ŒåŒº initialize and delete critical section in Constructor
+**  5)  ç²¾ç®€ä»£ç 
 */
 
 #ifndef __CSERIALPORT_H__
@@ -141,8 +141,8 @@
 
 struct serialPortInfo
 {
-	UINT portNr;//´®¿ÚºÅ
-	DWORD bytesRead;//¶ÁÈ¡µÄ×Ö½ÚÊı
+	UINT portNr;//ä¸²å£å·
+	DWORD bytesRead;//è¯»å–çš„å­—èŠ‚æ•°
 };
 
 struct serialPortBuffer
@@ -152,7 +152,7 @@ struct serialPortBuffer
 };
 
 #ifndef WM_COMM_MSG_BASE 
-#define WM_COMM_MSG_BASE		    WM_USER + 109		//!< ÏûÏ¢±àºÅµÄ»ùµã  
+#define WM_COMM_MSG_BASE		    WM_USER + 109		//!< æ¶ˆæ¯ç¼–å·çš„åŸºç‚¹  
 #endif
 
 #define WM_COMM_BREAK_DETECTED		WM_COMM_MSG_BASE + 1	// A break was detected on input.
@@ -166,109 +166,108 @@ struct serialPortBuffer
 #define WM_COMM_TXEMPTY_DETECTED	WM_COMM_MSG_BASE + 9	// The last character in the output buffer was sent.  
 #define WM_COMM_RXSTR               WM_COMM_MSG_BASE + 10   // Receive string
 
-#define MaxSerialPortNum 200   ///ÓĞĞ§µÄ´®¿Ú×Ü¸öÊı£¬²»ÊÇ´®¿ÚµÄºÅ //add by itas109 2014-01-09
-#define IsReceiveString  1     //²ÉÓÃºÎÖÖ·½Ê½½ÓÊÕ£ºReceiveString 1¶à×Ö·û´®½ÓÊÕ£¨¶ÔÓ¦ÏìÓ¦º¯ÊıÎªWm_SerialPort_RXSTR£©£¬ReceiveString 0Ò»¸ö×Ö·ûÒ»¸ö×Ö·û½ÓÊÕ£¨¶ÔÓ¦ÏìÓ¦º¯ÊıÎªWm_SerialPort_RXCHAR£©
+#define MaxSerialPortNum 200   ///æœ‰æ•ˆçš„ä¸²å£æ€»ä¸ªæ•°ï¼Œä¸æ˜¯ä¸²å£çš„å· //add by itas109 2014-01-09
+#define IsReceiveString  1     //é‡‡ç”¨ä½•ç§æ–¹å¼æ¥æ”¶ï¼šReceiveString 1å¤šå­—ç¬¦ä¸²æ¥æ”¶ï¼ˆå¯¹åº”å“åº”å‡½æ•°ä¸ºWm_SerialPort_RXSTRï¼‰ï¼ŒReceiveString 0ä¸€ä¸ªå­—ç¬¦ä¸€ä¸ªå­—ç¬¦æ¥æ”¶ï¼ˆå¯¹åº”å“åº”å‡½æ•°ä¸ºWm_SerialPort_RXCHARï¼‰
 
-namespace itas109{
-	class _declspec(dllexport) CSerialPort
-	{
-	public:
-		// contruction and destruction
-		CSerialPort();
-		virtual ~CSerialPort();
+class _declspec(dllexport) CSerialPort
+{
+public:
+	// contruction and destruction
+	CSerialPort();
+	virtual ~CSerialPort();
 
-		// port initialisation		
-		// UINT stopsbits = ONESTOPBIT   stop is index 0 = 1 1=1.5 2=2 
-		// ÇĞ¼Ç£ºstopsbits = 1£¬²»ÊÇÍ£Ö¹Î»Îª1¡£
-		// by itas109 20160506
-		BOOL		InitPort(HWND pPortOwner, UINT portnr = 1, UINT baud = 9600,
-			TCHAR parity = _T('N'), UINT databits = 8, UINT stopsbits = ONESTOPBIT,
-			DWORD dwCommEvents = EV_RXCHAR | EV_CTS, UINT nBufferSize = 512,
+	// port initialisation		
+	// UINT stopsbits = ONESTOPBIT   stop is index 0 = 1 1=1.5 2=2 
+	// åˆ‡è®°ï¼šstopsbits = 1ï¼Œä¸æ˜¯åœæ­¢ä½ä¸º1ã€‚
+	// by itas109 20160506
+	BOOL		InitPort(HWND pPortOwner, UINT portnr = 1, UINT baud = 9600,
+		TCHAR parity = _T('N'), UINT databits = 8, UINT stopsbits = ONESTOPBIT,
+		DWORD dwCommEvents = EV_RXCHAR | EV_CTS, UINT nBufferSize = 512,
 
-			DWORD ReadIntervalTimeout = 1000,
-			DWORD ReadTotalTimeoutMultiplier = 1000,
-			DWORD ReadTotalTimeoutConstant = 1000,
-			DWORD WriteTotalTimeoutMultiplier = 1000,
-			DWORD WriteTotalTimeoutConstant = 1000);
+		DWORD ReadIntervalTimeout = 1000,
+		DWORD ReadTotalTimeoutMultiplier = 1000,
+		DWORD ReadTotalTimeoutConstant = 1000,
+		DWORD WriteTotalTimeoutMultiplier = 1000,
+		DWORD WriteTotalTimeoutConstant = 1000);
 
-		// start/stop comm watching
-		///¿ØÖÆ´®¿Ú¼àÊÓÏß³Ì
-		BOOL		 StartMonitoring();//¿ªÊ¼¼àÌı
-		BOOL		 ResumeMonitoring();//»Ö¸´¼àÌı
-		BOOL		 SuspendMonitoring();//¹ÒÆğ¼àÌı
-		BOOL         IsThreadSuspend(HANDLE hThread);//ÅĞ¶ÏÏß³ÌÊÇ·ñ¹ÒÆğ //add by itas109 2016-06-29
+	// start/stop comm watching
+	///æ§åˆ¶ä¸²å£ç›‘è§†çº¿ç¨‹
+	BOOL		 StartMonitoring();//å¼€å§‹ç›‘å¬
+	BOOL		 ResumeMonitoring();//æ¢å¤ç›‘å¬
+	BOOL		 SuspendMonitoring();//æŒ‚èµ·ç›‘å¬
+	BOOL         IsThreadSuspend(HANDLE hThread);//åˆ¤æ–­çº¿ç¨‹æ˜¯å¦æŒ‚èµ· //add by itas109 2016-06-29
 
-		DWORD		 GetWriteBufferSize();///»ñÈ¡Ğ´»º³å´óĞ¡
-		DWORD		 GetCommEvents();///»ñÈ¡ÊÂ¼ş
-		DCB			 GetDCB();///»ñÈ¡DCB
+	DWORD		 GetWriteBufferSize();///è·å–å†™ç¼“å†²å¤§å°
+	DWORD		 GetCommEvents();///è·å–äº‹ä»¶
+	DCB			 GetDCB();///è·å–DCB
 
-		///Ğ´Êı¾İµ½´®¿Ú
-		void		WriteToPort(char* string, size_t n); // add by mrlong 2007-12-25
-		void		WriteToPort(PBYTE Buffer, size_t n);// add by mrlong
-		void		ClosePort();					 // add by mrlong 2007-12-2  
-		BOOL		IsOpened();
+	///å†™æ•°æ®åˆ°ä¸²å£
+	void		WriteToPort(char* string, size_t n); // add by mrlong 2007-12-25
+	void		WriteToPort(PBYTE Buffer, size_t n);// add by mrlong
+	void		ClosePort();					 // add by mrlong 2007-12-2  
+	BOOL		IsOpened();
 
-		std::string GetVersion();
+	std::string GetVersion();
 
-	protected:
-		// protected memberfunctions
-		void		ProcessErrorMessage(TCHAR* ErrorText);///´íÎó´¦Àí
-		static DWORD WINAPI CommThread(LPVOID pParam);///Ïß³Ìº¯Êı
-		static void	ReceiveChar(CSerialPort* port);
-		static void ReceiveStr(CSerialPort* port); //add by itas109 2016-06-22
-		static void	WriteChar(CSerialPort* port);
+protected:
+	// protected memberfunctions
+	void		ProcessErrorMessage(TCHAR* ErrorText);///é”™è¯¯å¤„ç†
+	static DWORD WINAPI CommThread(LPVOID pParam);///çº¿ç¨‹å‡½æ•°
+	static void	ReceiveChar(CSerialPort* port);
+	static void ReceiveStr(CSerialPort* port); //add by itas109 2016-06-22
+	static void	WriteChar(CSerialPort* port);
 
-	private:
-		// thread
-		HANDLE			    m_Thread;
-		BOOL                m_bIsSuspened;///thread¼àÊÓÏß³ÌÊÇ·ñ¹ÒÆğ
+private:
+	// thread
+	HANDLE			    m_Thread;
+	BOOL                m_bIsSuspened;///threadç›‘è§†çº¿ç¨‹æ˜¯å¦æŒ‚èµ·
 
-		// synchronisation objects
-		CRITICAL_SECTION	m_csCommunicationSync;///ÁÙ½ç×ÊÔ´
-		BOOL				m_bThreadAlive;///¼àÊÓÏß³ÌÔËĞĞ±êÖ¾
+	// synchronisation objects
+	CRITICAL_SECTION	m_csCommunicationSync;///ä¸´ç•Œèµ„æº
+	BOOL				m_bThreadAlive;///ç›‘è§†çº¿ç¨‹è¿è¡Œæ ‡å¿—
 
-		// handles
-		HANDLE				m_hShutdownEvent;  //stop·¢ÉúµÄÊÂ¼ş
-		HANDLE				m_hComm;		   // ´®¿Ú¾ä±ú 
-		HANDLE				m_hWriteEvent;	 // write
+	// handles
+	HANDLE				m_hShutdownEvent;  //stopå‘ç”Ÿçš„äº‹ä»¶
+	HANDLE				m_hComm;		   // ä¸²å£å¥æŸ„ 
+	HANDLE				m_hWriteEvent;	 // write
 
-		// Event array. 
-		// One element is used for each event. There are two event handles for each port.
-		// A Write event and a receive character event which is located in the overlapped structure (m_ov.hEvent).
-		// There is a general shutdown when the port is closed. 
-		///ÊÂ¼şÊı×é£¬°üÀ¨Ò»¸öĞ´ÊÂ¼ş£¬½ÓÊÕÊÂ¼ş£¬¹Ø±ÕÊÂ¼ş
-		///Ò»¸öÔªËØÓÃÓÚÒ»¸öÊÂ¼ş¡£ÓĞÁ½¸öÊÂ¼şÏß³Ì´¦Àí¶Ë¿Ú¡£
-		///Ğ´ÊÂ¼şºÍ½ÓÊÕ×Ö·ûÊÂ¼şÎ»ÓÚoverlapped½á¹¹Ìå£¨m_ov.hEvent£©ÖĞ
-		///µ±¶Ë¿Ú¹Ø±ÕÊ±£¬ÓĞÒ»¸öÍ¨ÓÃµÄ¹Ø±Õ¡£
-		HANDLE				m_hEventArray[3];
+	// Event array. 
+	// One element is used for each event. There are two event handles for each port.
+	// A Write event and a receive character event which is located in the overlapped structure (m_ov.hEvent).
+	// There is a general shutdown when the port is closed. 
+	///äº‹ä»¶æ•°ç»„ï¼ŒåŒ…æ‹¬ä¸€ä¸ªå†™äº‹ä»¶ï¼Œæ¥æ”¶äº‹ä»¶ï¼Œå…³é—­äº‹ä»¶
+	///ä¸€ä¸ªå…ƒç´ ç”¨äºä¸€ä¸ªäº‹ä»¶ã€‚æœ‰ä¸¤ä¸ªäº‹ä»¶çº¿ç¨‹å¤„ç†ç«¯å£ã€‚
+	///å†™äº‹ä»¶å’Œæ¥æ”¶å­—ç¬¦äº‹ä»¶ä½äºoverlappedç»“æ„ä½“ï¼ˆm_ov.hEventï¼‰ä¸­
+	///å½“ç«¯å£å…³é—­æ—¶ï¼Œæœ‰ä¸€ä¸ªé€šç”¨çš„å…³é—­ã€‚
+	HANDLE				m_hEventArray[3];
 
-		// structures
-		OVERLAPPED			m_ov;///Òì²½I/O
-		COMMTIMEOUTS		m_SerialPortTimeouts;///³¬Ê±ÉèÖÃ
-		DCB					m_dcb;///Éè±¸¿ØÖÆ¿é
+	// structures
+	OVERLAPPED			m_ov;///å¼‚æ­¥I/O
+	COMMTIMEOUTS		m_SerialPortTimeouts;///è¶…æ—¶è®¾ç½®
+	DCB					m_dcb;///è®¾å¤‡æ§åˆ¶å—
 
-		// owner window
-		HWND				m_pOwner;
+	// owner window
+	HWND				m_pOwner;
 
-		// misc
-		UINT				m_nPortNr;		///´®¿ÚºÅ
-		PBYTE				m_szWriteBuffer;///Ğ´»º³åÇø
-		std::list<serialPortBuffer> m_bufferList;
-		serialPortBuffer m_bufferStruct;
-		DWORD				m_dwCommEvents;
-		DWORD				m_nWriteBufferSize;///Ğ´»º³å´óĞ¡
+	// misc
+	UINT				m_nPortNr;		///ä¸²å£å·
+	PBYTE				m_szWriteBuffer;///å†™ç¼“å†²åŒº
+	std::list<serialPortBuffer> m_bufferList;
+	serialPortBuffer m_bufferStruct;
+	DWORD				m_dwCommEvents;
+	DWORD				m_nWriteBufferSize;///å†™ç¼“å†²å¤§å°
 
-		size_t				m_nWriteSize;//Ğ´Èë×Ö½ÚÊı //add by mrlong 2007-12-25
-	};
-
-	class _declspec(dllexport) CSerialPortInfo
-	{
-	public:
-		CSerialPortInfo();
-		~CSerialPortInfo();
-
-		static std::list<std::string> availablePorts();
-	};
+	size_t				m_nWriteSize;//å†™å…¥å­—èŠ‚æ•° //add by mrlong 2007-12-25
 };
+
+class _declspec(dllexport) CSerialPortInfo
+{
+public:
+	CSerialPortInfo();
+	~CSerialPortInfo();
+
+	static std::list<std::string> availablePorts();
+};
+
 
 #endif __CSERIALPORT_H__
