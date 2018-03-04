@@ -25,7 +25,7 @@
 **  2017-03-12 itas109   http://blog.csdn.net/itas109
 **  2017-12-16 itas109   http://blog.csdn.net/itas109
 **  2018-02-14 itas109   http://blog.csdn.net/itas109
-**  2018-02-14 jluliuchao
+**  2018-03-04 jluliuchao
 */
 
 #include "SerialPort.h"
